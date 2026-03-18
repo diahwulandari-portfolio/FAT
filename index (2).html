@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio | Diah Ayu Wulandari</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --blue: #1B5EA6;
+    --blue-light: #EBF2FB;
+    --teal: #0F766E;
+    --teal-light: #E6F4F3;
+    --green: #166534;
+    --green-light: #DCFCE7;
+    --amber: #92400E;
+    --amber-light: #FEF3C7;
+    --red: #991B1B;
+    --red-light: #FEE2E2;
+    --gray: #374151;
+    --gray-light: #F9FAFB;
+    --border: #E5E7EB;
+    --text: #111827;
+    --muted: #6B7280;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: #F3F4F6; color: var(--text); }
+
+  /* HEADER */
+  .header { background: linear-gradient(135deg, #1B5EA6 0%, #0F3E6E 100%); color: white; padding: 2.5rem 2rem 2rem; }
+  .header-inner { max-width: 1100px; margin: 0 auto; }
+  .header h1 { font-size: 2rem; font-weight: 700; letter-spacing: -0.02em; }
+  .header p { font-size: 1rem; opacity: 0.85; margin-top: 4px; }
+  .header-meta { display: flex; gap: 1.5rem; margin-top: 1rem; flex-wrap: wrap; }
+  .header-meta span { font-size: 0.85rem; opacity: 0.75; display: flex; align-items: center; gap: 6px; }
+  .badge { display: inline-block; background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.3); border-radius: 20px; padding: 3px 12px; font-size: 0.78rem; margin-top: 10px; margin-right: 6px; }
+
+  /* NAV */
+  .nav { background: white; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+  .nav-inner { max-width: 1100px; margin: 0 auto; display: flex; overflow-x: auto; scrollbar-width: none; }
+  .nav-inner::-webkit-scrollbar { display: none; }
+  .nav-btn { flex-shrink: 0; padding: 1rem 1.1rem; font-size: 0.82rem; font-weight: 500; color: var(--muted); border: none; background: none; cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap; transition: all 0.15s; }
+  .nav-btn:hover { color: var(--blue); }
+  .nav-btn.active { color: var(--blue); border-bottom-color: var(--blue); }
+
+  /* MAIN */
+  .main { max-width: 1100px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* METRIC CARDS */
+  .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+  .metric { background: white; border-radius: 12px; padding: 1.25rem; border: 1px solid var(--border); }
+  .metric .label { font-size: 0.78rem; color: var(--muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .metric .value { font-size: 1.6rem; font-weight: 700; }
+  .metric .sub { font-size: 0.78rem; color: var(--muted); margin-top: 4px; }
+  .metric.blue .value { color: var(--blue); }
+  .metric.teal .value { color: var(--teal); }
+  .metric.green .value { color: var(--green); }
+  .metric.amber .value { color: var(--amber); }
+
+  /* CARDS */
+  .card { background: white; border-radius: 12px; border: 1px solid var(--border); padding: 1.25rem; margin-bottom: 1rem; }
+  .card-title { font-size: 0.9rem; font-weight: 600; color: var(--gray); margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+  .card-title .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--blue); }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media(max-width: 640px) { .two-col { grid-template-columns: 1fr; } }
+
+  /* RATIO TABLE */
+  .ratio-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  .ratio-table th { text-align: left; padding: 8px 12px; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); border-bottom: 1px solid var(--border); }
+  .ratio-table td { padding: 10px 12px; border-bottom: 1px solid #F3F4F6; }
+  .ratio-table tr:last-child td { border-bottom: none; }
+  .ratio-table tr:hover td { background: var(--gray-light); }
+  .status { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+  .status.baik { background: var(--green-light); color: var(--green); }
+  .status.perhatian { background: var(--amber-light); color: var(--amber); }
+
+  /* JOURNAL TABLE */
+  .table-wrap { overflow-x: auto; }
+  .data-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; min-width: 600px; }
+  .data-table th { text-align: left; padding: 8px 10px; font-size: 0.73rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); background: var(--gray-light); border-bottom: 1px solid var(--border); position: sticky; top: 0; }
+  .data-table td { padding: 8px 10px; border-bottom: 1px solid #F9FAFB; vertical-align: top; }
+  .data-table tr:hover td { background: #F9FAFB; }
+  .data-table .num { text-align: right; font-variant-numeric: tabular-nums; }
+  .data-table .debit { color: #1B5EA6; font-weight: 500; }
+  .data-table .kredit { color: #0F766E; font-weight: 500; }
+  .data-table .code { font-family: monospace; font-size: 0.8rem; background: #F3F4F6; padding: 1px 6px; border-radius: 4px; }
+
+  /* LAPORAN KEUANGAN */
+  .lk-table { width: 100%; font-size: 0.85rem; border-collapse: collapse; }
+  .lk-table td { padding: 7px 10px; }
+  .lk-table .indent1 { padding-left: 24px; }
+  .lk-table .indent2 { padding-left: 40px; }
+  .lk-table .section-head { font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--blue); padding: 14px 10px 6px; border-top: 1px solid var(--border); }
+  .lk-table .subtotal { font-weight: 600; background: var(--blue-light); }
+  .lk-table .total { font-weight: 700; background: #1B5EA6; color: white; }
+  .lk-table .laba { font-weight: 700; background: var(--green-light); color: var(--green); font-size: 0.95rem; }
+  .lk-table .num { text-align: right; font-variant-numeric: tabular-nums; }
+  .lk-table .neg { color: var(--red); }
+
+  /* PAJAK */
+  .pajak-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+  .pajak-card { background: white; border-radius: 12px; border: 1px solid var(--border); padding: 1.1rem; }
+  .pajak-card .p-label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+  .pajak-card .p-val { font-size: 1.3rem; font-weight: 700; margin: 4px 0; }
+  .pajak-card .p-sub { font-size: 0.75rem; color: var(--muted); }
+
+  /* ALUR */
+  .flow { display: flex; flex-wrap: wrap; gap: 0; align-items: center; margin: 1rem 0; }
+  .flow-item { background: white; border: 1px solid var(--border); border-radius: 8px; padding: 0.6rem 0.9rem; font-size: 0.8rem; font-weight: 500; text-align: center; min-width: 100px; flex: 1; }
+  .flow-item.active-flow { background: var(--blue); color: white; border-color: var(--blue); }
+  .flow-arrow { color: var(--muted); padding: 0 4px; font-size: 1.1rem; flex-shrink: 0; }
+
+  /* NERACA */
+  .neraca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media(max-width: 640px) { .neraca-grid { grid-template-columns: 1fr; } }
+  .neraca-side h4 { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin-bottom: 0.5rem; }
+
+  /* CHART */
+  .chart-wrap { position: relative; height: 260px; }
+
+  /* SECTION HEADER */
+  .section-header { margin-bottom: 1.5rem; }
+  .section-header h2 { font-size: 1.3rem; font-weight: 700; }
+  .section-header p { font-size: 0.85rem; color: var(--muted); margin-top: 4px; }
+
+  /* SKILLS */
+  .skill-list { display: flex; flex-wrap: wrap; gap: 8px; }
+  .skill-tag { background: var(--blue-light); color: var(--blue); border-radius: 6px; padding: 5px 12px; font-size: 0.8rem; font-weight: 500; }
+  .skill-tag.teal { background: var(--teal-light); color: var(--teal); }
+  .skill-tag.green { background: var(--green-light); color: var(--green); }
+
+  /* FOOTER */
+  .footer { text-align: center; padding: 2rem; color: var(--muted); font-size: 0.8rem; border-top: 1px solid var(--border); background: white; margin-top: 2rem; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+      <div style="width:56px;height:56px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:1.3rem;font-weight:700;flex-shrink:0;">DA</div>
+      <div>
+        <h1>Diah Ayu Wulandari</h1>
+        <p>Finance &amp; Accounting Professional · Tax Administrator</p>
+        <div>
+          <span class="badge">Full-Cycle Accounting</span>
+          <span class="badge">Tax Compliance</span>
+          <span class="badge">SAP · QuickBooks · MYOB</span>
+          <span class="badge">5+ Tahun Pengalaman</span>
+        </div>
+      </div>
+    </div>
+    <div class="header-meta">
+      <span>📍 Jakarta Barat</span>
+      <span>📧 diahayuh98@gmail.com</span>
+      <span>🔗 linkedin.com/in/diahawulandari</span>
+      <span>📅 Portfolio: ABS Corp — Januari 2024</span>
+    </div>
+  </div>
+</div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <button class="nav-btn active" onclick="show('dashboard',this)">📊 Dashboard</button>
+    <button class="nav-btn" onclick="show('coa',this)">📋 Daftar Akun</button>
+    <button class="nav-btn" onclick="show('jurnal',this)">📝 Jurnal Umum</button>
+    <button class="nav-btn" onclick="show('bb',this)">📒 Buku Besar</button>
+    <button class="nav-btn" onclick="show('ns',this)">⚖️ Neraca Saldo</button>
+    <button class="nav-btn" onclick="show('adj',this)">🔧 Jurnal Penyesuaian</button>
+    <button class="nav-btn" onclick="show('nsd',this)">📋 NS Disesuaikan</button>
+    <button class="nav-btn" onclick="show('lr',this)">📈 Laba Rugi</button>
+    <button class="nav-btn" onclick="show('neraca',this)">🏦 Neraca</button>
+    <button class="nav-btn" onclick="show('ak',this)">💧 Arus Kas</button>
+    <button class="nav-btn" onclick="show('modal',this)">💼 Perubahan Modal</button>
+    <button class="nav-btn" onclick="show('jp',this)">🔒 Jurnal Penutup</button>
+    <button class="nav-btn" onclick="show('pajak',this)">🧾 Laporan Pajak</button>
+  </div>
+</nav>
+
+<div class="main">
+
+<!-- DASHBOARD -->
+<div id="dashboard" class="section active">
+  <div class="section-header">
+    <h2>Dashboard Keuangan</h2>
+    <p>ABS Corp · Periode Januari 2024 · Full-cycle accounting otomatis</p>
+  </div>
+  <div class="metrics">
+    <div class="metric blue">
+      <div class="label">Total Penjualan</div>
+      <div class="value">Rp 173,9 Jt</div>
+      <div class="sub">Net setelah retur & diskon</div>
+    </div>
+    <div class="metric teal">
+      <div class="label">Laba Kotor</div>
+      <div class="value">Rp 125,9 Jt</div>
+      <div class="sub">Gross Profit Margin 72,4%</div>
+    </div>
+    <div class="metric green">
+      <div class="label">Laba Bersih</div>
+      <div class="value">Rp 87,6 Jt</div>
+      <div class="sub">Net Profit Margin 50,4%</div>
+    </div>
+    <div class="metric amber">
+      <div class="label">Total Aset</div>
+      <div class="value">Rp 1,23 M</div>
+      <div class="sub">ROA 7,1%</div>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>Analisis Rasio Keuangan</div>
+      <table class="ratio-table">
+        <tr><th>Rasio</th><th>Nilai</th><th>Target</th><th>Status</th></tr>
+        <tr>
+          <td>Gross Profit Margin</td>
+          <td><strong>72,4%</strong></td><td>&gt;30%</td>
+          <td><span class="status baik">BAIK</span></td>
+        </tr>
+        <tr>
+          <td>Net Profit Margin</td>
+          <td><strong>50,4%</strong></td><td>&gt;10%</td>
+          <td><span class="status baik">BAIK</span></td>
+        </tr>
+        <tr>
+          <td>Return on Assets</td>
+          <td><strong>7,1%</strong></td><td>&gt;5%</td>
+          <td><span class="status baik">BAIK</span></td>
+        </tr>
+        <tr>
+          <td>Debt Ratio</td>
+          <td><strong>40,7%</strong></td><td>&lt;50%</td>
+          <td><span class="status baik">BAIK</span></td>
+        </tr>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="dot" style="background:#0F766E"></span>Komposisi Pendapatan & Beban</div>
+      <div class="chart-wrap">
+        <canvas id="chartPnL"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title"><span class="dot" style="background:#92400E"></span>Komposisi Aset</div>
+      <div class="chart-wrap">
+        <canvas id="chartAset"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="dot" style="background:#166534"></span>Liabilitas vs Modal</div>
+      <div class="chart-wrap">
+        <canvas id="chartLiabModal"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="dot"></span>Alur Full-Cycle Accounting yang Dikerjakan</div>
+    <div class="flow">
+      <div class="flow-item active-flow">Daftar Akun</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-item active-flow">Jurnal Umum</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-item active-flow">Buku Besar</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-item active-flow">Neraca Saldo</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-item active-flow">Jurnal Penyesuaian</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-item active-flow">NS Disesuaikan</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-item active-flow">Lap. Keuangan</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-item active-flow">Jurnal Penutup</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-item active-flow">Laporan Pajak</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="dot"></span>Keahlian yang Ditampilkan dalam Portfolio Ini</div>
+    <div style="margin-bottom:12px;">
+      <div style="font-size:0.78rem;color:var(--muted);margin-bottom:6px;">Akuntansi</div>
+      <div class="skill-list">
+        <span class="skill-tag">Full-Cycle Accounting</span>
+        <span class="skill-tag">Jurnal Umum & Penyesuaian</span>
+        <span class="skill-tag">Buku Besar (Perpetual)</span>
+        <span class="skill-tag">Neraca Saldo</span>
+        <span class="skill-tag">Jurnal Penutup</span>
+        <span class="skill-tag">Laporan Keuangan Lengkap</span>
+        <span class="skill-tag">Rekonsiliasi</span>
+        <span class="skill-tag">Metode Cash & Accrual</span>
+      </div>
+    </div>
+    <div style="margin-bottom:12px;">
+      <div style="font-size:0.78rem;color:var(--muted);margin-bottom:6px;">Perpajakan</div>
+      <div class="skill-list">
+        <span class="skill-tag teal">PPN Keluaran & Masukan</span>
+        <span class="skill-tag teal">PPh 4(2)</span>
+        <span class="skill-tag teal">PPh 21</span>
+        <span class="skill-tag teal">PPh 23</span>
+        <span class="skill-tag teal">PPh 25</span>
+        <span class="skill-tag teal">PPh 29 Badan</span>
+        <span class="skill-tag teal">E-Faktur</span>
+        <span class="skill-tag teal">Rekonsiliasi Fiskal</span>
+        <span class="skill-tag teal">Kurang/Lebih Bayar PPN</span>
+      </div>
+    </div>
+    <div>
+      <div style="font-size:0.78rem;color:var(--muted);margin-bottom:6px;">Analisis Keuangan</div>
+      <div class="skill-list">
+        <span class="skill-tag green">Rasio Profitabilitas</span>
+        <span class="skill-tag green">Rasio Likuiditas</span>
+        <span class="skill-tag green">Analisis Arus Kas</span>
+        <span class="skill-tag green">Excel Advanced & Otomasi</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DAFTAR AKUN -->
+<div id="coa" class="section">
+  <div class="section-header">
+    <h2>Daftar Akun (Chart of Account)</h2>
+    <p>ABS Corp · 42 akun aktif · Sistem Perpetual</p>
+  </div>
+  <div class="card">
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>Kode</th><th>Nama Akun</th><th>Kategori</th><th>Sub-Kategori</th><th>Tipe</th><th>Laporan</th><th>Saldo Normal</th></tr></thead>
+        <tbody>
+          <tr><td><span class="code">1100</span></td><td>Kas</td><td>Aset</td><td>Aset Lancar</td><td>Detail</td><td>Neraca</td><td>Debit</td></tr>
+          <tr><td><span class="code">1110</span></td><td>Bank BCA</td><td>Aset</td><td>Aset Lancar</td><td>Detail</td><td>Neraca</td><td>Debit</td></tr>
+          <tr><td><span class="code">1120</span></td><td>Piutang Dagang</td><td>Aset</td><td>Aset Lancar</td><td>Detail</td><td>Neraca</td><td>Debit</td></tr>
+          <tr><td><span class="code">1130</span></td><td>Persediaan Barang Dagang</td><td>Aset</td><td>Aset Lancar</td><td>Detail</td><td>Neraca</td><td>Debit</td></tr>
+          <tr><td><span class="code">1140</span></td><td>Perlengkapan Kantor</td><td>Aset</td><td>Aset Lancar</td><td>Detail</td><td>Neraca</td><td>Debit</td></tr>
+          <tr><td><span class="code">1150</span></td><td>Biaya Dibayar Dimuka</td><td>Aset</td><td>Aset Lancar</td><td>Detail</td><td>Neraca</td><td>Debit</td></tr>
+          <tr><td><span class="code">1160</span></td><td>Piutang Pajak</td><td>Aset</td><td>Aset Lancar</td><td>Detail</td><td>Neraca</td><td>Debit</td></tr>
+          <tr><td><span class="code">1200</span></td><td>Peralatan</td><td>Aset</td><td>Aset Tetap</td><td>Detail</td><td>Neraca</td><td>Debit</td></tr>
+          <tr><td><span class="code">1210</span></td><td>Akumulasi Penyusutan Peralatan</td><td>Aset</td><td>Aset Tetap</td><td>Detail</td><td>Neraca</td><td>Kredit</td></tr>
+          <tr><td><span class="code">1220</span></td><td>Kendaraan</td><td>Aset</td><td>Aset Tetap</td><td>Detail</td><td>Neraca</td><td>Debit</td></tr>
+          <tr><td><span class="code">1230</span></td><td>Akumulasi Penyusutan Kendaraan</td><td>Aset</td><td>Aset Tetap</td><td>Detail</td><td>Neraca</td><td>Kredit</td></tr>
+          <tr><td><span class="code">2100</span></td><td>Utang Dagang</td><td>Liabilitas</td><td>Hutang Lancar</td><td>Detail</td><td>Neraca</td><td>Kredit</td></tr>
+          <tr><td><span class="code">2110</span></td><td>Utang Gaji</td><td>Liabilitas</td><td>Hutang Lancar</td><td>Detail</td><td>Neraca</td><td>Kredit</td></tr>
+          <tr><td><span class="code">2120</span></td><td>Utang Pajak</td><td>Liabilitas</td><td>Hutang Lancar</td><td>Detail</td><td>Neraca</td><td>Kredit</td></tr>
+          <tr><td><span class="code">2130</span></td><td>Pendapatan Diterima Dimuka</td><td>Liabilitas</td><td>Hutang Lancar</td><td>Detail</td><td>Neraca</td><td>Kredit</td></tr>
+          <tr><td><span class="code">2200</span></td><td>Utang Bank Jangka Panjang</td><td>Liabilitas</td><td>Hutang Jangka Panjang</td><td>Detail</td><td>Neraca</td><td>Kredit</td></tr>
+          <tr><td><span class="code">3100</span></td><td>Modal Pemilik</td><td>Modal</td><td>Modal</td><td>Detail</td><td>Neraca</td><td>Kredit</td></tr>
+          <tr><td><span class="code">3110</span></td><td>Prive Pemilik</td><td>Modal</td><td>Modal</td><td>Detail</td><td>Neraca</td><td>Debit</td></tr>
+          <tr><td><span class="code">3120</span></td><td>Laba Ditahan</td><td>Modal</td><td>Modal</td><td>Detail</td><td>Neraca</td><td>Kredit</td></tr>
+          <tr><td><span class="code">4100</span></td><td>Penjualan</td><td>Pendapatan</td><td>Pendapatan</td><td>Detail</td><td>Laba Rugi</td><td>Kredit</td></tr>
+          <tr><td><span class="code">4110</span></td><td>Retur Penjualan</td><td>Pendapatan</td><td>Pendapatan</td><td>Detail</td><td>Laba Rugi</td><td>Debit</td></tr>
+          <tr><td><span class="code">4120</span></td><td>Potongan Penjualan</td><td>Pendapatan</td><td>Pendapatan</td><td>Detail</td><td>Laba Rugi</td><td>Debit</td></tr>
+          <tr><td><span class="code">4200</span></td><td>Pendapatan Lain-lain</td><td>Pendapatan</td><td>Pendapatan Lain-lain</td><td>Detail</td><td>Laba Rugi</td><td>Kredit</td></tr>
+          <tr><td><span class="code">5100</span></td><td>Pembelian</td><td>HPP</td><td>HPP</td><td>Detail</td><td>Laba Rugi</td><td>Debit</td></tr>
+          <tr><td><span class="code">5110</span></td><td>Harga Pokok Penjualan</td><td>HPP</td><td>HPP</td><td>Detail</td><td>Laba Rugi</td><td>Debit</td></tr>
+          <tr><td><span class="code">5120</span></td><td>Retur Pembelian</td><td>HPP</td><td>HPP</td><td>Detail</td><td>Laba Rugi</td><td>Kredit</td></tr>
+          <tr><td><span class="code">5130</span></td><td>Potongan Pembelian</td><td>HPP</td><td>HPP</td><td>Detail</td><td>Laba Rugi</td><td>Kredit</td></tr>
+          <tr><td><span class="code">5140</span></td><td>Ongkos Angkut Masuk</td><td>HPP</td><td>HPP</td><td>Detail</td><td>Laba Rugi</td><td>Debit</td></tr>
+          <tr><td><span class="code">6100</span></td><td>Beban Gaji</td><td>Beban</td><td>Beban</td><td>Detail</td><td>Laba Rugi</td><td>Debit</td></tr>
+          <tr><td><span class="code">6110</span></td><td>Beban Sewa</td><td>Beban</td><td>Beban</td><td>Detail</td><td>Laba Rugi</td><td>Debit</td></tr>
+          <tr><td><span class="code">6120</span></td><td>Beban Listrik &amp; Air</td><td>Beban</td><td>Beban</td><td>Detail</td><td>Laba Rugi</td><td>Debit</td></tr>
+          <tr><td><span class="code">6130</span></td><td>Beban Perlengkapan</td><td>Beban</td><td>Beban</td><td>Detail</td><td>Laba Rugi</td><td>Debit</td></tr>
+          <tr><td><span class="code">6140</span></td><td>Beban Penyusutan Peralatan</td><td>Beban</td><td>Beban</td><td>Detail</td><td>Laba Rugi</td><td>Debit</td></tr>
+          <tr><td><span class="code">6150</span></td><td>Beban Penyusutan Kendaraan</td><td>Beban</td><td>Beban</td><td>Detail</td><td>Laba Rugi</td><td>Debit</td></tr>
+          <tr><td><span class="code">6160</span></td><td>Beban Asuransi</td><td>Beban</td><td>Beban</td><td>Detail</td><td>Laba Rugi</td><td>Debit</td></tr>
+          <tr><td><span class="code">6170</span></td><td>Beban Iklan</td><td>Beban</td><td>Beban</td><td>Detail</td><td>Laba Rugi</td><td>Debit</td></tr>
+          <tr><td><span class="code">6180</span></td><td>Beban Bunga</td><td>Beban</td><td>Beban</td><td>Detail</td><td>Laba Rugi</td><td>Debit</td></tr>
+          <tr><td><span class="code">6190</span></td><td>Biaya Admin</td><td>Beban</td><td>Beban</td><td>Detail</td><td>Laba Rugi</td><td>Debit</td></tr>
+          <tr><td><span class="code">6200</span></td><td>Biaya Perjalanan Dinas</td><td>Beban</td><td>Beban</td><td>Detail</td><td>Laba Rugi</td><td>Debit</td></tr>
+          <tr><td><span class="code">6300</span></td><td>Beban Lain-lain</td><td>Beban</td><td>Beban Lain-lain</td><td>Detail</td><td>Laba Rugi</td><td>Debit</td></tr>
+          <tr><td><span class="code">6400</span></td><td>Beban Pajak Penghasilan</td><td>Beban</td><td>Beban Lain-lain</td><td>Detail</td><td>Laba Rugi</td><td>Debit</td></tr>
+          <tr><td><span class="code">7000</span></td><td>Ikhtisar Laba Rugi</td><td>—</td><td>—</td><td>—</td><td>Jurnal Penutup</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- JURNAL UMUM -->
+<div id="jurnal" class="section">
+  <div class="section-header">
+    <h2>Jurnal Umum</h2>
+    <p>ABS Corp · Januari 2024 · Metode Cash Basis & Accrual · Sistem Perpetual</p>
+  </div>
+  <div class="card">
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>Tanggal</th><th>No. Bukti</th><th>Kode</th><th>Nama Akun</th><th>Keterangan</th><th class="num">Debit (Rp)</th><th class="num">Kredit (Rp)</th></tr></thead>
+        <tbody>
+          <tr><td>01/01/2024</td><td>BBM-001</td><td><span class="code">1110</span></td><td>Bank BCA</td><td>Modal awal pemilik</td><td class="num debit">650.000.000</td><td class="num">—</td></tr>
+          <tr><td></td><td></td><td><span class="code">3100</span></td><td>Modal Pemilik</td><td>Modal awal pemilik</td><td class="num">—</td><td class="num kredit">650.000.000</td></tr>
+          <tr><td>01/01/2024</td><td>BKM-001</td><td><span class="code">1100</span></td><td>Kas</td><td>Mengisi kas</td><td class="num debit">50.000.000</td><td class="num">—</td></tr>
+          <tr><td></td><td></td><td><span class="code">1110</span></td><td>Bank BCA</td><td>Mengisi kas</td><td class="num">—</td><td class="num kredit">50.000.000</td></tr>
+          <tr><td>02/01/2024</td><td>BBK-001</td><td><span class="code">1130</span></td><td>Persediaan Barang Dagang</td><td>Pembelian persediaan tunai (excl. PPN 11%)</td><td class="num debit">75.000.000</td><td class="num">—</td></tr>
+          <tr><td></td><td></td><td><span class="code">1160</span></td><td>Piutang Pajak</td><td>PPN Masukan 11%</td><td class="num debit">8.250.000</td><td class="num">—</td></tr>
+          <tr><td></td><td></td><td><span class="code">1110</span></td><td>Bank BCA</td><td>Pembelian persediaan tunai (excl. PPN 11%)</td><td class="num">—</td><td class="num kredit">83.250.000</td></tr>
+          <tr><td>03/01/2024</td><td>BBK-002</td><td><span class="code">1150</span></td><td>Biaya Dibayar Dimuka</td><td>Pembayaran sewa gedung 1 tahun (PPh 4(2) 10%)</td><td class="num debit">30.000.000</td><td class="num">—</td></tr>
+          <tr><td></td><td></td><td><span class="code">1110</span></td><td>Bank BCA</td><td>Pembayaran sewa gedung 1 tahun (PPh 4(2) 10%)</td><td class="num">—</td><td class="num kredit">27.000.000</td></tr>
+          <tr><td></td><td></td><td><span class="code">2120</span></td><td>Utang Pajak</td><td>PPh 4(2) 10% atas sewa gedung</td><td class="num">—</td><td class="num kredit">3.000.000</td></tr>
+          <tr><td>05/01/2024</td><td>BBM-002</td><td><span class="code">1110</span></td><td>Bank BCA</td><td>Penjualan tunai (incl. PPN 11%)</td><td class="num debit">65.000.000</td><td class="num">—</td></tr>
+          <tr><td></td><td></td><td><span class="code">4100</span></td><td>Penjualan</td><td>Penjualan tunai (incl. PPN 11%)</td><td class="num">—</td><td class="num kredit">58.558.559</td></tr>
+          <tr><td></td><td></td><td><span class="code">2120</span></td><td>Utang Pajak</td><td>PPN Keluaran 11%</td><td class="num">—</td><td class="num kredit">6.441.441</td></tr>
+          <tr><td></td><td>HPP-001</td><td><span class="code">5110</span></td><td>Harga Pokok Penjualan</td><td>HPP penjualan tunai (BBM-002)</td><td class="num debit">18.000.000</td><td class="num">—</td></tr>
+          <tr><td></td><td></td><td><span class="code">1130</span></td><td>Persediaan Barang Dagang</td><td>HPP penjualan tunai (BBM-002)</td><td class="num">—</td><td class="num kredit">18.000.000</td></tr>
+          <tr><td>07/01/2024</td><td>BPD-001</td><td><span class="code">1120</span></td><td>Piutang Dagang</td><td>Penjualan kredit (excl. PPN 11%)</td><td class="num debit">44.400.000</td><td class="num">—</td></tr>
+          <tr><td></td><td></td><td><span class="code">4100</span></td><td>Penjualan</td><td>Penjualan kredit (excl. PPN 11%)</td><td class="num">—</td><td class="num kredit">40.000.000</td></tr>
+          <tr><td></td><td></td><td><span class="code">2120</span></td><td>Utang Pajak</td><td>PPN Keluaran 11%</td><td class="num">—</td><td class="num kredit">4.400.000</td></tr>
+          <tr><td></td><td>HPP-002</td><td><span class="code">5110</span></td><td>Harga Pokok Penjualan</td><td>HPP penjualan kredit (BPD-001)</td><td class="num debit">5.000.000</td><td class="num">—</td></tr>
+          <tr><td></td><td></td><td><span class="code">1130</span></td><td>Persediaan Barang Dagang</td><td>HPP penjualan kredit (BPD-001)</td><td class="num">—</td><td class="num kredit">5.000.000</td></tr>
+          <tr><td>08/01/2024</td><td>BBK-003</td><td><span class="code">1220</span></td><td>Kendaraan</td><td>Pembelian mobil kantor kredit bank</td><td class="num debit">436.000.000</td><td class="num">—</td></tr>
+          <tr><td></td><td></td><td><span class="code">1110</span></td><td>Bank BCA</td><td>DP 15% pembelian mobil kantor</td><td class="num">—</td><td class="num kredit">65.400.000</td></tr>
+          <tr><td></td><td></td><td><span class="code">2200</span></td><td>Utang Bank Jangka Panjang</td><td>Pembelian mobil kantor kredit bank</td><td class="num">—</td><td class="num kredit">370.600.000</td></tr>
+          <tr><td>10/01/2024</td><td>BBM-003</td><td><span class="code">1110</span></td><td>Bank BCA</td><td>Terima pembayaran piutang</td><td class="num debit">25.000.000</td><td class="num">—</td></tr>
+          <tr><td></td><td></td><td><span class="code">1120</span></td><td>Piutang Dagang</td><td>Terima pembayaran piutang</td><td class="num">—</td><td class="num kredit">25.000.000</td></tr>
+          <tr><td></td><td>BUD-001</td><td><span class="code">1200</span></td><td>Peralatan</td><td>Pembelian peralatan kredit</td><td class="num debit">15.000.000</td><td class="num">—</td></tr>
+          <tr><td></td><td></td><td><span class="code">2100</span></td><td>Utang Dagang</td><td>Pembelian peralatan kredit</td><td class="num">—</td><td class="num kredit">15.000.000</td></tr>
+          <tr><td>12/01/2024</td><td>BUD-002</td><td><span class="code">1130</span></td><td>Persediaan Barang Dagang</td><td>Pembelian persediaan kredit (incl. PPN 11%)</td><td class="num debit">90.090.090</td><td class="num">—</td></tr>
+          <tr><td></td><td></td><td><span class="code">1160</span></td><td>Piutang Pajak</td><td>PPN Masukan 11%</td><td class="num debit">9.909.910</td><td class="num">—</td></tr>
+          <tr><td></td><td></td><td><span class="code">2100</span></td><td>Utang Dagang</td><td>Pembelian persediaan kredit (incl. PPN 11%)</td><td class="num">—</td><td class="num kredit">100.000.000</td></tr>
+          <tr><td>13/01/2024</td><td>BPD-002</td><td><span class="code">1120</span></td><td>Piutang Dagang</td><td>Penjualan kredit (incl. PPN 11%)</td><td class="num debit">85.500.000</td><td class="num">—</td></tr>
+          <tr><td></td><td></td><td><span class="code">4100</span></td><td>Penjualan</td><td>Penjualan kredit (incl. PPN 11%)</td><td class="num">—</td><td class="num kredit">77.027.027</td></tr>
+          <tr><td></td><td></td><td><span class="code">2120</span></td><td>Utang Pajak</td><td>PPN Keluaran 11%</td><td class="num">—</td><td class="num kredit">8.472.973</td></tr>
+          <tr><td></td><td>HPP-003</td><td><span class="code">5110</span></td><td>Harga Pokok Penjualan</td><td>HPP penjualan kredit (BPD-002)</td><td class="num debit">25.050.000</td><td class="num">—</td></tr>
+          <tr><td></td><td></td><td><span class="code">1130</span></td><td>Persediaan Barang Dagang</td><td>HPP penjualan kredit (BPD-002)</td><td class="num">—</td><td class="num kredit">25.050.000</td></tr>
+          <tr><td></td><td>BBM-004</td><td><span class="code">1110</span></td><td>Bank BCA</td><td>Down payment</td><td class="num debit">10.000.000</td><td class="num">—</td></tr>
+          <tr><td></td><td></td><td><span class="code">2130</span></td><td>Pendapatan Diterima Dimuka</td><td>Down payment</td><td class="num">—</td><td class="num kredit">10.000.000</td></tr>
+          <tr><td>14/01/2024</td><td>BPD-003</td><td><span class="code">4110</span></td><td>Retur Penjualan</td><td>Retur penjualan 1.500.000 (incl. PPN 11%)</td><td class="num debit">1.351.351</td><td class="num">—</td></tr>
+          <tr><td></td><td></td><td><span class="code">2120</span></td><td>Utang Pajak</td><td>PPN Keluaran atas retur penjualan</td><td class="num debit">148.649</td><td class="num">—</td></tr>
+          <tr><td></td><td></td><td><span class="code">1120</span></td><td>Piutang Dagang</td><td>Retur penjualan 1.500.000 (incl. PPN 11%)</td><td class="num">—</td><td class="num kredit">1.500.000</td></tr>
+          <tr><td></td><td>HPP-004</td><td><span class="code">1130</span></td><td>Persediaan Barang Dagang</td><td>HPP retur penjualan (BPD-003)</td><td class="num debit">115.500</td><td class="num">—</td></tr>
+          <tr><td></td><td></td><td><span class="code">5110</span></td><td>Harga Pokok Penjualan</td><td>HPP retur penjualan (BPD-003)</td><td class="num">—</td><td class="num kredit">115.500</td></tr>
+          <tr><td>15/01/2024</td><td>BBK-004</td><td><span class="code">6200</span></td><td>Biaya Perjalanan Dinas</td><td>Biaya perjalanan dinas</td><td class="num debit">6.000.000</td><td class="num">—</td></tr>
+          <tr><td></td><td></td><td><span class="code">1110</span></td><td>Bank BCA</td><td>Biaya perjalanan dinas</td><td class="num">—</td><td class="num kredit">6.000.000</td></tr>
+          <tr><td>16/01/2024</td><td>BBM-005</td><td><span class="code">1110</span></td><td>Bank BCA</td><td>Pelunasan piutang 19.400.000 dengan potongan 2%</td><td class="num debit">19.012.000</td><td class="num">—</td></tr>
+          <tr><td></td><td></td><td><span class="code">4120</span></td><td>Potongan Penjualan</td><td>Pelunasan piutang dengan potongan penjualan 2%</td><td class="num debit">349.550</td><td class="num">—</td></tr>
+          <tr><td></td><td></td><td><span class="code">2120</span></td><td>Utang Pajak</td><td>PPN Keluaran atas potongan penjualan</td><td class="num debit">38.450</td><td class="num">—</td></tr>
+          <tr><td></td><td></td><td><span class="code">1120</span></td><td>Piutang Dagang</td><td>Pelunasan piutang 19.400.000 dengan potongan 2%</td><td class="num">—</td><td class="num kredit">19.400.000</td></tr>
+          <tr><td>17/01/2024</td><td>BUD-003</td><td><span class="code">2100</span></td><td>Utang Dagang</td><td>Retur pembelian 15.000.000 (incl. PPN 11%)</td><td class="num debit">15.000.000</td><td class="num">—</td></tr>
+          <tr><td></td><td></td><td><span class="code">1130</span></td><td>Persediaan Barang Dagang</td><td>Retur pembelian (incl. PPN 11%)</td><td class="num">—</td><td class="num kredit">13.513.514</td></tr>
+          <tr><td></td><td></td><td><span class="code">1160</span></td><td>Piutang Pajak</td><td>PPN Masukan atas retur pembelian</td><td class="num">—</td><td class="num kredit">1.486.486</td></tr>
+          <tr><td>20/01/2024</td><td>BKK-001</td><td><span class="code">6300</span></td><td>Beban Lain-lain</td><td>Bayar jasa service komputer (incl. PPh 23 2%)</td><td class="num debit">2.000.000</td><td class="num">—</td></tr>
+          <tr><td></td><td></td><td><span class="code">2120</span></td><td>Utang Pajak</td><td>PPh 23 jasa service</td><td class="num">—</td><td class="num kredit">40.000</td></tr>
+          <tr><td></td><td></td><td><span class="code">1100</span></td><td>Kas</td><td>Bayar jasa service komputer</td><td class="num">—</td><td class="num kredit">1.960.000</td></tr>
+          <tr><td>22/01/2024</td><td>BKK-002</td><td><span class="code">6120</span></td><td>Beban Listrik &amp; Air</td><td>Bayar listrik &amp; air</td><td class="num debit">1.500.000</td><td class="num">—</td></tr>
+          <tr><td></td><td></td><td><span class="code">1100</span></td><td>Kas</td><td>Bayar listrik &amp; air</td><td class="num">—</td><td class="num kredit">1.500.000</td></tr>
+          <tr><td>25/01/2024</td><td>BKK-003</td><td><span class="code">6170</span></td><td>Beban Iklan</td><td>Biaya iklan &amp; promosi</td><td class="num debit">2.000.000</td><td class="num">—</td></tr>
+          <tr><td></td><td></td><td><span class="code">1100</span></td><td>Kas</td><td>Biaya iklan &amp; promosi</td><td class="num">—</td><td class="num kredit">2.000.000</td></tr>
+          <tr><td>30/01/2024</td><td>BKK-004</td><td><span class="code">1140</span></td><td>Perlengkapan Kantor</td><td>Beli perlengkapan kantor</td><td class="num debit">3.000.000</td><td class="num">—</td></tr>
+          <tr><td></td><td></td><td><span class="code">1100</span></td><td>Kas</td><td>Beli perlengkapan kantor</td><td class="num">—</td><td class="num kredit">3.000.000</td></tr>
+          <tr><td>31/01/2024</td><td>BKK-005</td><td><span class="code">3110</span></td><td>Prive Pemilik</td><td>Prive pemilik</td><td class="num debit">5.000.000</td><td class="num">—</td></tr>
+          <tr><td></td><td></td><td><span class="code">1100</span></td><td>Kas</td><td>Prive pemilik</td><td class="num">—</td><td class="num kredit">5.000.000</td></tr>
+          <tr style="font-weight:700;background:var(--blue-light);">
+            <td colspan="5"><strong>TOTAL</strong></td>
+            <td class="num debit"><strong>1.697.715.500</strong></td>
+            <td class="num kredit"><strong>1.697.715.500</strong></td>
+          </tr>
+          <tr><td colspan="7" style="text-align:center;padding:10px;background:var(--green-light);color:var(--green);font-weight:700;font-size:0.83rem;">CEK BALANCE (Debit - Kredit = 0) &nbsp;✓ BALANCE</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+<!-- BUKU BESAR -->
+<div id="bb" class="section">
+  <div class="section-header">
+    <h2>Buku Besar (General Ledger)</h2>
+    <p>ABS Corp · Januari 2024 · Pilih akun untuk melihat mutasi</p>
+  </div>
+
+  <div class="card" style="margin-bottom:1rem;">
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+      <label style="font-size:0.85rem;color:var(--muted);white-space:nowrap;">Pilih Akun:</label>
+      <select id="bbSelect" onchange="renderBB()" style="flex:1;min-width:220px;padding:8px 12px;border:0.5px solid var(--color-border-secondary, #D1D5DB);border-radius:8px;font-size:0.85rem;background:var(--color-background-primary,white);color:var(--color-text-primary,#111);">
+        <option value="1100">1100 - Kas</option>
+        <option value="1110">1110 - Bank BCA</option>
+        <option value="1120">1120 - Piutang Dagang</option>
+        <option value="1130">1130 - Persediaan Barang Dagang</option>
+        <option value="1140">1140 - Perlengkapan Kantor</option>
+        <option value="1150">1150 - Biaya Dibayar Dimuka</option>
+        <option value="1160">1160 - Piutang Pajak</option>
+        <option value="1200">1200 - Peralatan</option>
+        <option value="1210">1210 - Akumulasi Penyusutan Peralatan</option>
+        <option value="1220">1220 - Kendaraan</option>
+        <option value="1230">1230 - Akumulasi Penyusutan Kendaraan</option>
+        <option value="2100">2100 - Utang Dagang</option>
+        <option value="2110">2110 - Utang Gaji</option>
+        <option value="2120">2120 - Utang Pajak</option>
+        <option value="2130">2130 - Pendapatan Diterima Dimuka</option>
+        <option value="2200">2200 - Utang Bank Jangka Panjang</option>
+        <option value="3100">3100 - Modal Pemilik</option>
+        <option value="3110">3110 - Prive Pemilik</option>
+        <option value="4100">4100 - Penjualan</option>
+        <option value="4110">4110 - Retur Penjualan</option>
+        <option value="4120">4120 - Potongan Penjualan</option>
+        <option value="5110">5110 - Harga Pokok Penjualan</option>
+        <option value="6100">6100 - Beban Gaji</option>
+        <option value="6110">6110 - Beban Sewa</option>
+        <option value="6120">6120 - Beban Listrik & Air</option>
+        <option value="6130">6130 - Beban Perlengkapan</option>
+        <option value="6140">6140 - Beban Penyusutan Peralatan</option>
+        <option value="6150">6150 - Beban Penyusutan Kendaraan</option>
+        <option value="6170">6170 - Beban Iklan</option>
+        <option value="6190">6190 - Biaya Admin</option>
+        <option value="6200">6200 - Biaya Perjalanan Dinas</option>
+        <option value="6300">6300 - Beban Lain-lain</option>
+      </select>
+      <div id="bbMeta" style="font-size:0.8rem;color:var(--muted);"></div>
+    </div>
+  </div>
+
+  <div id="bbCard" class="card">
+    <div class="table-wrap">
+      <table class="data-table" id="bbTable">
+        <thead>
+          <tr>
+            <th>Tanggal</th>
+            <th>No. Bukti</th>
+            <th>Keterangan</th>
+            <th class="num">Debit (Rp)</th>
+            <th class="num">Kredit (Rp)</th>
+            <th class="num">Saldo (Rp)</th>
+          </tr>
+        </thead>
+        <tbody id="bbBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+const bbData = {
+  "1100": { name:"Kas", kat:"Aset Lancar", normal:"D", rows:[
+    {tgl:"01/01/2024",bukti:"BKM-001",ket:"Mengisi kas",d:50000000,k:0},
+    {tgl:"20/01/2024",bukti:"BKK-001",ket:"Bayar jasa service komputer",d:0,k:1960000},
+    {tgl:"22/01/2024",bukti:"BKK-002",ket:"Bayar listrik & air",d:0,k:1500000},
+    {tgl:"25/01/2024",bukti:"BKK-003",ket:"Biaya iklan & promosi",d:0,k:2000000},
+    {tgl:"30/01/2024",bukti:"BKK-004",ket:"Beli perlengkapan kantor",d:0,k:3000000},
+    {tgl:"31/01/2024",bukti:"BKK-005",ket:"Prive pemilik",d:0,k:5000000},
+  ]},
+  "1110": { name:"Bank BCA", kat:"Aset Lancar", normal:"D", rows:[
+    {tgl:"01/01/2024",bukti:"BBM-001",ket:"Modal awal pemilik",d:650000000,k:0},
+    {tgl:"01/01/2024",bukti:"BKM-001",ket:"Mengisi kas",d:0,k:50000000},
+    {tgl:"02/01/2024",bukti:"BBK-001",ket:"Pembelian persediaan tunai",d:0,k:83250000},
+    {tgl:"03/01/2024",bukti:"BBK-002",ket:"Pembayaran sewa gedung",d:0,k:27000000},
+    {tgl:"05/01/2024",bukti:"BBM-002",ket:"Penjualan tunai",d:65000000,k:0},
+    {tgl:"08/01/2024",bukti:"BBK-003",ket:"DP 15% pembelian mobil",d:0,k:65400000},
+    {tgl:"10/01/2024",bukti:"BBM-003",ket:"Terima pembayaran piutang",d:25000000,k:0},
+    {tgl:"13/01/2024",bukti:"BBM-004",ket:"Down payment",d:10000000,k:0},
+    {tgl:"15/01/2024",bukti:"BBK-004",ket:"Biaya perjalanan dinas",d:0,k:6000000},
+    {tgl:"16/01/2024",bukti:"BBM-005",ket:"Pelunasan piutang",d:19012000,k:0},
+    {tgl:"31/01/2024",bukti:"ADJ-007",ket:"Rekonsiliasi admin bank",d:0,k:30000},
+  ]},
+  "1120": { name:"Piutang Dagang", kat:"Aset Lancar", normal:"D", rows:[
+    {tgl:"07/01/2024",bukti:"BPD-001",ket:"Penjualan kredit",d:44400000,k:0},
+    {tgl:"10/01/2024",bukti:"BBM-003",ket:"Terima pembayaran piutang",d:0,k:25000000},
+    {tgl:"13/01/2024",bukti:"BPD-002",ket:"Penjualan kredit",d:85500000,k:0},
+    {tgl:"14/01/2024",bukti:"BPD-003",ket:"Retur penjualan",d:0,k:1500000},
+    {tgl:"16/01/2024",bukti:"BBM-005",ket:"Pelunasan piutang",d:0,k:19400000},
+  ]},
+  "1130": { name:"Persediaan Barang Dagang", kat:"Aset Lancar", normal:"D", rows:[
+    {tgl:"02/01/2024",bukti:"BBK-001",ket:"Pembelian persediaan tunai",d:75000000,k:0},
+    {tgl:"05/01/2024",bukti:"HPP-001",ket:"HPP penjualan tunai",d:0,k:18000000},
+    {tgl:"07/01/2024",bukti:"HPP-002",ket:"HPP penjualan kredit",d:0,k:5000000},
+    {tgl:"12/01/2024",bukti:"BUD-002",ket:"Pembelian persediaan kredit",d:90090090,k:0},
+    {tgl:"13/01/2024",bukti:"HPP-003",ket:"HPP penjualan kredit",d:0,k:25050000},
+    {tgl:"14/01/2024",bukti:"HPP-004",ket:"HPP retur penjualan",d:115500,k:0},
+    {tgl:"17/01/2024",bukti:"BUD-003",ket:"Retur pembelian",d:0,k:13513514},
+  ]},
+  "1140": { name:"Perlengkapan Kantor", kat:"Aset Lancar", normal:"D", rows:[
+    {tgl:"30/01/2024",bukti:"BKK-004",ket:"Beli perlengkapan kantor",d:3000000,k:0},
+    {tgl:"31/01/2024",bukti:"ADJ-001",ket:"Penyesuaian perlengkapan terpakai",d:0,k:1500000},
+  ]},
+  "1150": { name:"Biaya Dibayar Dimuka", kat:"Aset Lancar", normal:"D", rows:[
+    {tgl:"03/01/2024",bukti:"BBK-002",ket:"Pembayaran sewa gedung 1 tahun",d:30000000,k:0},
+    {tgl:"31/01/2024",bukti:"ADJ-005",ket:"Sewa gedung Januari 2024",d:0,k:2500000},
+  ]},
+  "1160": { name:"Piutang Pajak", kat:"Aset Lancar", normal:"D", rows:[
+    {tgl:"02/01/2024",bukti:"BBK-001",ket:"PPN Masukan 11%",d:8250000,k:0},
+    {tgl:"12/01/2024",bukti:"BUD-002",ket:"PPN Masukan 11%",d:9909910,k:0},
+    {tgl:"17/01/2024",bukti:"BUD-003",ket:"PPN Masukan retur pembelian",d:0,k:1486486},
+    {tgl:"31/01/2024",bukti:"ADJ-006",ket:"Rekonsiliasi PPN Masukan",d:0,k:16673424},
+  ]},
+  "1200": { name:"Peralatan", kat:"Aset Tetap", normal:"D", rows:[
+    {tgl:"10/01/2024",bukti:"BUD-001",ket:"Pembelian peralatan kredit",d:15000000,k:0},
+  ]},
+  "1210": { name:"Akumulasi Penyusutan Peralatan", kat:"Aset Tetap", normal:"K", rows:[
+    {tgl:"31/01/2024",bukti:"ADJ-002",ket:"Penyusutan peralatan",d:0,k:312500},
+  ]},
+  "1220": { name:"Kendaraan", kat:"Aset Tetap", normal:"D", rows:[
+    {tgl:"08/01/2024",bukti:"BBK-003",ket:"Pembelian mobil kantor kredit bank",d:436000000,k:0},
+  ]},
+  "1230": { name:"Akumulasi Penyusutan Kendaraan", kat:"Aset Tetap", normal:"K", rows:[
+    {tgl:"31/01/2024",bukti:"ADJ-003",ket:"Penyusutan kendaraan",d:0,k:5958333},
+  ]},
+  "2100": { name:"Utang Dagang", kat:"Hutang Lancar", normal:"K", rows:[
+    {tgl:"10/01/2024",bukti:"BUD-001",ket:"Pembelian peralatan kredit",d:0,k:15000000},
+    {tgl:"12/01/2024",bukti:"BUD-002",ket:"Pembelian persediaan kredit",d:0,k:100000000},
+    {tgl:"17/01/2024",bukti:"BUD-003",ket:"Retur pembelian",d:15000000,k:0},
+  ]},
+  "2110": { name:"Utang Gaji", kat:"Hutang Lancar", normal:"K", rows:[
+    {tgl:"31/01/2024",bukti:"ADJ-004",ket:"Gaji terutang",d:0,k:16425000},
+  ]},
+  "2120": { name:"Utang Pajak", kat:"Hutang Lancar", normal:"K", rows:[
+    {tgl:"03/01/2024",bukti:"BBK-002",ket:"PPh 4(2) atas sewa gedung",d:0,k:3000000},
+    {tgl:"05/01/2024",bukti:"BBM-002",ket:"PPN Keluaran 11%",d:0,k:6441441},
+    {tgl:"07/01/2024",bukti:"BPD-001",ket:"PPN Keluaran 11%",d:0,k:4400000},
+    {tgl:"13/01/2024",bukti:"BPD-002",ket:"PPN Keluaran 11%",d:0,k:8472973},
+    {tgl:"14/01/2024",bukti:"BPD-003",ket:"PPN Keluaran retur",d:148649,k:0},
+    {tgl:"16/01/2024",bukti:"BBM-005",ket:"PPN Keluaran potongan",d:38450,k:0},
+    {tgl:"20/01/2024",bukti:"BKK-001",ket:"PPh 23 jasa service",d:0,k:40000},
+    {tgl:"31/01/2024",bukti:"ADJ-004",ket:"PPh 21 terutang",d:0,k:75000},
+    {tgl:"31/01/2024",bukti:"ADJ-006",ket:"Rekonsiliasi PPN Keluaran",d:19127315,k:0},
+    {tgl:"31/01/2024",bukti:"ADJ-006",ket:"PPN Terhutang",d:0,k:2453891},
+  ]},
+  "2130": { name:"Pendapatan Diterima Dimuka", kat:"Hutang Lancar", normal:"K", rows:[
+    {tgl:"13/01/2024",bukti:"BBM-004",ket:"Down payment",d:0,k:10000000},
+  ]},
+  "2200": { name:"Utang Bank Jangka Panjang", kat:"Hutang Jangka Panjang", normal:"K", rows:[
+    {tgl:"08/01/2024",bukti:"BBK-003",ket:"Pembelian mobil kantor kredit bank",d:0,k:370600000},
+  ]},
+  "3100": { name:"Modal Pemilik", kat:"Modal", normal:"K", rows:[
+    {tgl:"01/01/2024",bukti:"BBM-001",ket:"Modal awal pemilik",d:0,k:650000000},
+  ]},
+  "3110": { name:"Prive Pemilik", kat:"Modal", normal:"D", rows:[
+    {tgl:"31/01/2024",bukti:"BKK-005",ket:"Prive pemilik",d:5000000,k:0},
+  ]},
+  "4100": { name:"Penjualan", kat:"Pendapatan", normal:"K", rows:[
+    {tgl:"05/01/2024",bukti:"BBM-002",ket:"Penjualan tunai",d:0,k:58558559},
+    {tgl:"07/01/2024",bukti:"BPD-001",ket:"Penjualan kredit",d:0,k:40000000},
+    {tgl:"13/01/2024",bukti:"BPD-002",ket:"Penjualan kredit",d:0,k:77027027},
+  ]},
+  "4110": { name:"Retur Penjualan", kat:"Pendapatan", normal:"D", rows:[
+    {tgl:"14/01/2024",bukti:"BPD-003",ket:"Retur penjualan",d:1351351,k:0},
+  ]},
+  "4120": { name:"Potongan Penjualan", kat:"Pendapatan", normal:"D", rows:[
+    {tgl:"16/01/2024",bukti:"BBM-005",ket:"Potongan penjualan 2%",d:349550,k:0},
+  ]},
+  "5110": { name:"Harga Pokok Penjualan", kat:"HPP", normal:"D", rows:[
+    {tgl:"05/01/2024",bukti:"HPP-001",ket:"HPP penjualan tunai",d:18000000,k:0},
+    {tgl:"07/01/2024",bukti:"HPP-002",ket:"HPP penjualan kredit",d:5000000,k:0},
+    {tgl:"13/01/2024",bukti:"HPP-003",ket:"HPP penjualan kredit",d:25050000,k:0},
+    {tgl:"14/01/2024",bukti:"HPP-004",ket:"HPP retur penjualan",d:0,k:115500},
+  ]},
+  "6100": { name:"Beban Gaji", kat:"Beban", normal:"D", rows:[
+    {tgl:"31/01/2024",bukti:"ADJ-004",ket:"Gaji terutang",d:16500000,k:0},
+  ]},
+  "6110": { name:"Beban Sewa", kat:"Beban", normal:"D", rows:[
+    {tgl:"31/01/2024",bukti:"ADJ-005",ket:"Sewa gedung Januari 2024",d:2500000,k:0},
+  ]},
+  "6120": { name:"Beban Listrik & Air", kat:"Beban", normal:"D", rows:[
+    {tgl:"22/01/2024",bukti:"BKK-002",ket:"Bayar listrik & air",d:1500000,k:0},
+  ]},
+  "6130": { name:"Beban Perlengkapan", kat:"Beban", normal:"D", rows:[
+    {tgl:"31/01/2024",bukti:"ADJ-001",ket:"Penyesuaian perlengkapan",d:1500000,k:0},
+  ]},
+  "6140": { name:"Beban Penyusutan Peralatan", kat:"Beban", normal:"D", rows:[
+    {tgl:"31/01/2024",bukti:"ADJ-002",ket:"Penyusutan peralatan",d:312500,k:0},
+  ]},
+  "6150": { name:"Beban Penyusutan Kendaraan", kat:"Beban", normal:"D", rows:[
+    {tgl:"31/01/2024",bukti:"ADJ-003",ket:"Penyusutan kendaraan",d:5958333,k:0},
+  ]},
+  "6170": { name:"Beban Iklan", kat:"Beban", normal:"D", rows:[
+    {tgl:"25/01/2024",bukti:"BKK-003",ket:"Biaya iklan & promosi",d:2000000,k:0},
+  ]},
+  "6190": { name:"Biaya Admin", kat:"Beban", normal:"D", rows:[
+    {tgl:"31/01/2024",bukti:"ADJ-007",ket:"Rekonsiliasi admin bank",d:30000,k:0},
+  ]},
+  "6200": { name:"Biaya Perjalanan Dinas", kat:"Beban", normal:"D", rows:[
+    {tgl:"15/01/2024",bukti:"BBK-004",ket:"Biaya perjalanan dinas",d:6000000,k:0},
+  ]},
+  "6300": { name:"Beban Lain-lain", kat:"Beban", normal:"D", rows:[
+    {tgl:"20/01/2024",bukti:"BKK-001",ket:"Bayar jasa service komputer",d:2000000,k:0},
+  ]},
+};
+
+function fmt(v){ return v===0?'—':v.toLocaleString('id-ID'); }
+
+function renderBB(){
+  const kode = document.getElementById('bbSelect').value;
+  const akun = bbData[kode];
+  if(!akun) return;
+  let saldo = 0;
+  let totalD = 0, totalK = 0;
+  let html = '';
+  akun.rows.forEach(r => {
+    totalD += r.d; totalK += r.k;
+    if(akun.normal==='D') saldo += r.d - r.k;
+    else saldo += r.k - r.d;
+    const saldoFmt = saldo.toLocaleString('id-ID');
+    const saldoClass = saldo < 0 ? 'num neg' : 'num';
+    html += `<tr>
+      <td>${r.tgl}</td>
+      <td><span class="code">${r.bukti}</span></td>
+      <td>${r.ket}</td>
+      <td class="num debit">${fmt(r.d)}</td>
+      <td class="num kredit">${fmt(r.k)}</td>
+      <td class="${saldoClass}">${saldoFmt}</td>
+    </tr>`;
+  });
+  html += `<tr style="font-weight:700;background:var(--color-background-secondary,#F9FAFB);">
+    <td colspan="3"><strong>Grand Total</strong></td>
+    <td class="num debit"><strong>${totalD.toLocaleString('id-ID')}</strong></td>
+    <td class="num kredit"><strong>${totalK.toLocaleString('id-ID')}</strong></td>
+    <td class="num" style="color:#166534;"><strong>${saldo.toLocaleString('id-ID')}</strong></td>
+  </tr>`;
+  document.getElementById('bbBody').innerHTML = html;
+  document.getElementById('bbMeta').innerHTML =
+    `<span style="background:#E6F1FB;color:#0C447C;padding:2px 10px;border-radius:6px;font-size:0.78rem;">${akun.kat}</span>
+     <span style="margin-left:6px;background:#EAF3DE;color:#166534;padding:2px 10px;border-radius:6px;font-size:0.78rem;">Saldo Normal: ${akun.normal==='D'?'Debit':'Kredit'}</span>`;
+}
+setTimeout(renderBB, 100);
+</script>
+
+<!-- NERACA SALDO -->
+<div id="ns" class="section">
+  <div class="section-header">
+    <h2>Neraca Saldo (Trial Balance)</h2>
+    <p>ABS Corp · 31 Januari 2024 · Sebelum Penyesuaian</p>
+  </div>
+  <div class="card">
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>Kode</th><th>Nama Akun</th><th class="num">Debit (Rp)</th><th class="num">Kredit (Rp)</th><th class="num">Saldo (Rp)</th></tr></thead>
+        <tbody>
+          <tr><td><span class="code">1100</span></td><td>Kas</td><td class="num debit">50.000.000</td><td class="num kredit">13.460.000</td><td class="num">36.540.000</td></tr>
+          <tr><td><span class="code">1110</span></td><td>Bank BCA</td><td class="num debit">769.012.000</td><td class="num kredit">231.650.000</td><td class="num">537.362.000</td></tr>
+          <tr><td><span class="code">1120</span></td><td>Piutang Dagang</td><td class="num debit">129.900.000</td><td class="num kredit">45.900.000</td><td class="num">84.000.000</td></tr>
+          <tr><td><span class="code">1130</span></td><td>Persediaan Barang Dagang</td><td class="num debit">165.205.590</td><td class="num kredit">61.563.514</td><td class="num">103.642.076</td></tr>
+          <tr><td><span class="code">1140</span></td><td>Perlengkapan Kantor</td><td class="num debit">3.000.000</td><td class="num">—</td><td class="num">3.000.000</td></tr>
+          <tr><td><span class="code">1150</span></td><td>Biaya Dibayar Dimuka</td><td class="num debit">30.000.000</td><td class="num">—</td><td class="num">30.000.000</td></tr>
+          <tr><td><span class="code">1160</span></td><td>Piutang Pajak</td><td class="num debit">18.159.910</td><td class="num kredit">1.486.486</td><td class="num">16.673.424</td></tr>
+          <tr><td><span class="code">1200</span></td><td>Peralatan</td><td class="num debit">15.000.000</td><td class="num">—</td><td class="num">15.000.000</td></tr>
+          <tr><td><span class="code">1210</span></td><td>Akumulasi Penyusutan Peralatan</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr>
+          <tr><td><span class="code">1220</span></td><td>Kendaraan</td><td class="num debit">436.000.000</td><td class="num">—</td><td class="num">436.000.000</td></tr>
+          <tr><td><span class="code">1230</span></td><td>Akumulasi Penyusutan Kendaraan</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr>
+          <tr><td><span class="code">2100</span></td><td>Utang Dagang</td><td class="num debit">15.000.000</td><td class="num kredit">115.000.000</td><td class="num neg">(100.000.000)</td></tr>
+          <tr><td><span class="code">2110</span></td><td>Utang Gaji</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr>
+          <tr><td><span class="code">2120</span></td><td>Utang Pajak</td><td class="num debit">187.099</td><td class="num kredit">22.354.414</td><td class="num neg">(22.167.315)</td></tr>
+          <tr><td><span class="code">2130</span></td><td>Pendapatan Diterima Dimuka</td><td class="num">—</td><td class="num kredit">10.000.000</td><td class="num neg">(10.000.000)</td></tr>
+          <tr><td><span class="code">2200</span></td><td>Utang Bank Jangka Panjang</td><td class="num">—</td><td class="num kredit">370.600.000</td><td class="num neg">(370.600.000)</td></tr>
+          <tr><td><span class="code">3100</span></td><td>Modal Pemilik</td><td class="num">—</td><td class="num kredit">650.000.000</td><td class="num neg">(650.000.000)</td></tr>
+          <tr><td><span class="code">3110</span></td><td>Prive Pemilik</td><td class="num debit">5.000.000</td><td class="num">—</td><td class="num">5.000.000</td></tr>
+          <tr><td><span class="code">3120</span></td><td>Laba Ditahan</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr>
+          <tr><td><span class="code">4100</span></td><td>Penjualan</td><td class="num">—</td><td class="num kredit">175.585.586</td><td class="num neg">(175.585.586)</td></tr>
+          <tr><td><span class="code">4110</span></td><td>Retur Penjualan</td><td class="num debit">1.351.351</td><td class="num">—</td><td class="num">1.351.351</td></tr>
+          <tr><td><span class="code">4120</span></td><td>Potongan Penjualan</td><td class="num debit">349.550</td><td class="num">—</td><td class="num">349.550</td></tr>
+          <tr><td><span class="code">5110</span></td><td>Harga Pokok Penjualan</td><td class="num debit">48.050.000</td><td class="num kredit">115.500</td><td class="num">47.934.500</td></tr>
+          <tr><td><span class="code">6120</span></td><td>Beban Listrik &amp; Air</td><td class="num debit">1.500.000</td><td class="num">—</td><td class="num">1.500.000</td></tr>
+          <tr><td><span class="code">6130</span></td><td>Beban Perlengkapan</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr>
+          <tr><td><span class="code">6140</span></td><td>Beban Penyusutan Peralatan</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr>
+          <tr><td><span class="code">6150</span></td><td>Beban Penyusutan Kendaraan</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr>
+          <tr><td><span class="code">6170</span></td><td>Beban Iklan</td><td class="num debit">2.000.000</td><td class="num">—</td><td class="num">2.000.000</td></tr>
+          <tr><td><span class="code">6190</span></td><td>Biaya Admin</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr>
+          <tr><td><span class="code">6200</span></td><td>Biaya Perjalanan Dinas</td><td class="num debit">6.000.000</td><td class="num">—</td><td class="num">6.000.000</td></tr>
+          <tr><td><span class="code">6300</span></td><td>Beban Lain-lain</td><td class="num debit">2.000.000</td><td class="num">—</td><td class="num">2.000.000</td></tr>
+          <tr style="font-weight:700;background:var(--blue-light);">
+            <td colspan="2"><strong>Grand Total</strong></td>
+            <td class="num debit"><strong>1.697.715.500</strong></td>
+            <td class="num kredit"><strong>1.697.715.500</strong></td>
+            <td class="num" style="color:var(--green);"><strong>✓ BALANCE</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- JURNAL PENYESUAIAN -->
+<div id="adj" class="section">
+  <div class="section-header">
+    <h2>Jurnal Penyesuaian (Adjusting Entries)</h2>
+    <p>ABS Corp · 31 Januari 2024 · 7 ayat penyesuaian</p>
+  </div>
+  <div class="metrics" style="grid-template-columns:repeat(auto-fit,minmax(160px,1fr));">
+    <div class="metric"><div class="label">Perlengkapan Terpakai</div><div class="value" style="font-size:1.1rem;">Rp 1.500.000</div></div>
+    <div class="metric"><div class="label">Penyusutan Peralatan</div><div class="value" style="font-size:1.1rem;">Rp 312.500</div></div>
+    <div class="metric"><div class="label">Penyusutan Kendaraan</div><div class="value" style="font-size:1.1rem;">Rp 5.958.333</div></div>
+    <div class="metric"><div class="label">Gaji Terutang</div><div class="value" style="font-size:1.1rem;">Rp 16.500.000</div></div>
+    <div class="metric"><div class="label">PPh 21 Terutang</div><div class="value" style="font-size:1.1rem;">Rp 75.000</div></div>
+    <div class="metric"><div class="label">Sewa Terpakai</div><div class="value" style="font-size:1.1rem;">Rp 2.500.000</div></div>
+    <div class="metric"><div class="label">Rekonsiliasi PPN</div><div class="value" style="font-size:1.1rem;">Rp 19.127.315</div></div>
+    <div class="metric"><div class="label">Admin Bank</div><div class="value" style="font-size:1.1rem;">Rp 30.000</div></div>
+  </div>
+  <div class="card">
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>No.</th><th>Tanggal</th><th>Kode</th><th>Nama Akun</th><th>Keterangan</th><th class="num">Debit (Rp)</th><th class="num">Kredit (Rp)</th></tr></thead>
+        <tbody>
+          <tr><td>31/01/2024</td><td>ADJ-001</td><td><span class="code">6130</span></td><td>Beban Perlengkapan</td><td>Penyesuaian Perlengkapan</td><td class="num debit">1.500.000</td><td class="num">—</td></tr>
+          <tr><td></td><td></td><td><span class="code">1140</span></td><td>Perlengkapan Kantor</td><td>Penyesuaian Perlengkapan</td><td class="num">—</td><td class="num kredit">1.500.000</td></tr>
+          <tr><td>31/01/2024</td><td>ADJ-002</td><td><span class="code">6140</span></td><td>Beban Penyusutan Peralatan</td><td>Penyusutan Peralatan</td><td class="num debit">312.500</td><td class="num">—</td></tr>
+          <tr><td></td><td></td><td><span class="code">1210</span></td><td>Akumulasi Penyusutan Peralatan</td><td>Penyusutan Peralatan</td><td class="num">—</td><td class="num kredit">312.500</td></tr>
+          <tr><td>31/01/2024</td><td>ADJ-003</td><td><span class="code">6150</span></td><td>Beban Penyusutan Kendaraan</td><td>Penyusutan Kendaraan</td><td class="num debit">5.958.333</td><td class="num">—</td></tr>
+          <tr><td></td><td></td><td><span class="code">1230</span></td><td>Akumulasi Penyusutan Kendaraan</td><td>Penyusutan Kendaraan</td><td class="num">—</td><td class="num kredit">5.958.333</td></tr>
+          <tr><td>31/01/2024</td><td>ADJ-004</td><td><span class="code">6100</span></td><td>Beban Gaji</td><td>Gaji Terutang</td><td class="num debit">16.500.000</td><td class="num">—</td></tr>
+          <tr><td></td><td></td><td><span class="code">2110</span></td><td>Utang Gaji</td><td>Gaji Terutang</td><td class="num">—</td><td class="num kredit">16.425.000</td></tr>
+          <tr><td></td><td></td><td><span class="code">2120</span></td><td>Utang Pajak</td><td>PPh 21 Terutang</td><td class="num">—</td><td class="num kredit">75.000</td></tr>
+          <tr><td>31/01/2024</td><td>ADJ-005</td><td><span class="code">6110</span></td><td>Beban Sewa</td><td>Sewa Gedung Jan 2024</td><td class="num debit">2.500.000</td><td class="num">—</td></tr>
+          <tr><td></td><td></td><td><span class="code">1150</span></td><td>Biaya Dibayar Dimuka</td><td>Sewa Gedung Jan 2024</td><td class="num">—</td><td class="num kredit">2.500.000</td></tr>
+          <tr><td>31/01/2024</td><td>ADJ-006</td><td><span class="code">2120</span></td><td>Utang Pajak</td><td>Rekonsiliasi PPN Keluaran</td><td class="num debit">19.127.315</td><td class="num">—</td></tr>
+          <tr><td></td><td></td><td><span class="code">1160</span></td><td>Piutang Pajak</td><td>Rekonsiliasi PPN Masukan</td><td class="num">—</td><td class="num kredit">16.673.424</td></tr>
+          <tr><td></td><td></td><td><span class="code">2120</span></td><td>Utang Pajak</td><td>PPN Terhutang</td><td class="num">—</td><td class="num kredit">2.453.891</td></tr>
+          <tr><td>31/01/2024</td><td>ADJ-007</td><td><span class="code">6190</span></td><td>Biaya Admin</td><td>Rekonsiliasi Admin Bank</td><td class="num debit">30.000</td><td class="num">—</td></tr>
+          <tr><td></td><td></td><td><span class="code">1110</span></td><td>Bank BCA</td><td>Rekonsiliasi Admin Bank</td><td class="num">—</td><td class="num kredit">30.000</td></tr>
+          <tr style="font-weight:700;background:var(--blue-light);">
+            <td colspan="5"><strong>Total Penyesuaian</strong></td>
+            <td class="num debit"><strong>45.928.148</strong></td>
+            <td class="num kredit"><strong>45.928.148</strong></td>
+          </tr>
+          <tr><td colspan="7" style="text-align:center;padding:10px;background:var(--green-light);color:var(--green);font-weight:700;font-size:0.83rem;">CEK BALANCE (Debit - Kredit = 0) &nbsp;✓ BALANCE</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+<!-- NERACA SALDO DISESUAIKAN -->
+<div id="nsd" class="section">
+  <div class="section-header">
+    <h2>Neraca Saldo Disesuaikan (Adjusted Trial Balance)</h2>
+    <p>ABS Corp · 31 Januari 2024 · Setelah Jurnal Penyesuaian</p>
+  </div>
+  <div class="card">
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th rowspan="2">Kode</th>
+            <th rowspan="2">Nama Akun</th>
+            <th colspan="2" style="text-align:center;border-bottom:1px solid var(--border);">Neraca Saldo</th>
+            <th colspan="2" style="text-align:center;border-bottom:1px solid var(--border);">Penyesuaian</th>
+            <th colspan="2" style="text-align:center;border-bottom:1px solid var(--border);">Saldo Disesuaikan</th>
+          </tr>
+          <tr>
+            <th class="num">Debit (Rp)</th><th class="num">Kredit (Rp)</th>
+            <th class="num">Adj. Debit (Rp)</th><th class="num">Adj. Kredit (Rp)</th>
+            <th class="num">Debit (Rp)</th><th class="num">Kredit (Rp)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="code">1100</span></td><td>Kas</td><td class="num debit">50.000.000</td><td class="num kredit">13.460.000</td><td class="num">—</td><td class="num">—</td><td class="num debit">36.540.000</td><td class="num">—</td></tr>
+          <tr><td><span class="code">1110</span></td><td>Bank BCA</td><td class="num debit">769.012.000</td><td class="num kredit">231.650.000</td><td class="num">—</td><td class="num kredit">30.000</td><td class="num debit">537.332.000</td><td class="num">—</td></tr>
+          <tr><td><span class="code">1120</span></td><td>Piutang Dagang</td><td class="num debit">129.900.000</td><td class="num kredit">45.900.000</td><td class="num">—</td><td class="num">—</td><td class="num debit">84.000.000</td><td class="num">—</td></tr>
+          <tr><td><span class="code">1130</span></td><td>Persediaan Barang Dagang</td><td class="num debit">165.205.590</td><td class="num kredit">61.563.514</td><td class="num">—</td><td class="num">—</td><td class="num debit">103.642.076</td><td class="num">—</td></tr>
+          <tr><td><span class="code">1140</span></td><td>Perlengkapan Kantor</td><td class="num debit">3.000.000</td><td class="num">—</td><td class="num">—</td><td class="num kredit">1.500.000</td><td class="num debit">1.500.000</td><td class="num">—</td></tr>
+          <tr><td><span class="code">1150</span></td><td>Biaya Dibayar Dimuka</td><td class="num debit">30.000.000</td><td class="num">—</td><td class="num">—</td><td class="num kredit">2.500.000</td><td class="num debit">27.500.000</td><td class="num">—</td></tr>
+          <tr><td><span class="code">1160</span></td><td>Piutang Pajak</td><td class="num debit">18.159.910</td><td class="num kredit">1.486.486</td><td class="num">—</td><td class="num kredit">16.673.424</td><td class="num">—</td><td class="num">—</td></tr>
+          <tr><td><span class="code">1200</span></td><td>Peralatan</td><td class="num debit">15.000.000</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num debit">15.000.000</td><td class="num">—</td></tr>
+          <tr><td><span class="code">1210</span></td><td>Akumulasi Penyusutan Peralatan</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num kredit">312.500</td><td class="num">—</td><td class="num kredit">312.500</td></tr>
+          <tr><td><span class="code">1220</span></td><td>Kendaraan</td><td class="num debit">436.000.000</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num debit">436.000.000</td><td class="num">—</td></tr>
+          <tr><td><span class="code">1230</span></td><td>Akumulasi Penyusutan Kendaraan</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num kredit">5.958.333</td><td class="num">—</td><td class="num kredit">5.958.333</td></tr>
+          <tr><td><span class="code">2100</span></td><td>Utang Dagang</td><td class="num debit">15.000.000</td><td class="num kredit">115.000.000</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num kredit">100.000.000</td></tr>
+          <tr><td><span class="code">2110</span></td><td>Utang Gaji</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num kredit">16.425.000</td><td class="num">—</td><td class="num kredit">16.425.000</td></tr>
+          <tr><td><span class="code">2120</span></td><td>Utang Pajak</td><td class="num debit">187.099</td><td class="num kredit">22.354.414</td><td class="num debit">19.127.315</td><td class="num kredit">2.528.891</td><td class="num">—</td><td class="num kredit">5.568.891</td></tr>
+          <tr><td><span class="code">2130</span></td><td>Pendapatan Diterima Dimuka</td><td class="num">—</td><td class="num kredit">10.000.000</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num kredit">10.000.000</td></tr>
+          <tr><td><span class="code">2200</span></td><td>Utang Bank Jangka Panjang</td><td class="num">—</td><td class="num kredit">370.600.000</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num kredit">370.600.000</td></tr>
+          <tr><td><span class="code">3100</span></td><td>Modal Pemilik</td><td class="num">—</td><td class="num kredit">650.000.000</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num kredit">650.000.000</td></tr>
+          <tr><td><span class="code">3110</span></td><td>Prive Pemilik</td><td class="num debit">5.000.000</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num debit">5.000.000</td><td class="num">—</td></tr>
+          <tr><td><span class="code">3120</span></td><td>Laba Ditahan</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr>
+          <tr><td><span class="code">4100</span></td><td>Penjualan</td><td class="num">—</td><td class="num kredit">175.585.586</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num kredit">175.585.586</td></tr>
+          <tr><td><span class="code">4110</span></td><td>Retur Penjualan</td><td class="num debit">1.351.351</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num debit">1.351.351</td><td class="num">—</td></tr>
+          <tr><td><span class="code">4120</span></td><td>Potongan Penjualan</td><td class="num debit">349.550</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num debit">349.550</td><td class="num">—</td></tr>
+          <tr><td><span class="code">4200</span></td><td>Pendapatan Lain-lain</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr>
+          <tr><td><span class="code">5100</span></td><td>Pembelian</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr>
+          <tr><td><span class="code">5110</span></td><td>Harga Pokok Penjualan</td><td class="num debit">48.050.000</td><td class="num kredit">115.500</td><td class="num">—</td><td class="num">—</td><td class="num debit">47.934.500</td><td class="num">—</td></tr>
+          <tr><td><span class="code">5120</span></td><td>Retur Pembelian</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr>
+          <tr><td><span class="code">5130</span></td><td>Potongan Pembelian</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr>
+          <tr><td><span class="code">5140</span></td><td>Ongkos Angkut Masuk</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr>
+          <tr><td><span class="code">6100</span></td><td>Beban Gaji</td><td class="num">—</td><td class="num">—</td><td class="num debit">16.500.000</td><td class="num">—</td><td class="num debit">16.500.000</td><td class="num">—</td></tr>
+          <tr><td><span class="code">6110</span></td><td>Beban Sewa</td><td class="num">—</td><td class="num">—</td><td class="num debit">2.500.000</td><td class="num">—</td><td class="num debit">2.500.000</td><td class="num">—</td></tr>
+          <tr><td><span class="code">6120</span></td><td>Beban Listrik &amp; Air</td><td class="num debit">1.500.000</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num debit">1.500.000</td><td class="num">—</td></tr>
+          <tr><td><span class="code">6130</span></td><td>Beban Perlengkapan</td><td class="num">—</td><td class="num">—</td><td class="num debit">1.500.000</td><td class="num">—</td><td class="num debit">1.500.000</td><td class="num">—</td></tr>
+          <tr><td><span class="code">6140</span></td><td>Beban Penyusutan Peralatan</td><td class="num">—</td><td class="num">—</td><td class="num debit">312.500</td><td class="num">—</td><td class="num debit">312.500</td><td class="num">—</td></tr>
+          <tr><td><span class="code">6150</span></td><td>Beban Penyusutan Kendaraan</td><td class="num">—</td><td class="num">—</td><td class="num debit">5.958.333</td><td class="num">—</td><td class="num debit">5.958.333</td><td class="num">—</td></tr>
+          <tr><td><span class="code">6160</span></td><td>Beban Asuransi</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr>
+          <tr><td><span class="code">6170</span></td><td>Beban Iklan</td><td class="num debit">2.000.000</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num debit">2.000.000</td><td class="num">—</td></tr>
+          <tr><td><span class="code">6180</span></td><td>Beban Bunga</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr>
+          <tr><td><span class="code">6190</span></td><td>Biaya Admin</td><td class="num">—</td><td class="num">—</td><td class="num debit">30.000</td><td class="num">—</td><td class="num debit">30.000</td><td class="num">—</td></tr>
+          <tr><td><span class="code">6200</span></td><td>Biaya Perjalanan Dinas</td><td class="num debit">6.000.000</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num debit">6.000.000</td><td class="num">—</td></tr>
+          <tr><td><span class="code">6300</span></td><td>Beban Lain-lain</td><td class="num debit">2.000.000</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num debit">2.000.000</td><td class="num">—</td></tr>
+          <tr><td><span class="code">6400</span></td><td>Beban Pajak Penghasilan</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr>
+          <tr><td><span class="code">7000</span></td><td>Ikhtisar Laba Rugi</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr>
+          <tr style="font-weight:700;background:var(--blue-light);">
+            <td colspan="2"><strong>Total</strong></td>
+            <td class="num debit"><strong>1.697.715.500</strong></td>
+            <td class="num kredit"><strong>1.697.715.500</strong></td>
+            <td class="num debit"><strong>45.928.148</strong></td>
+            <td class="num kredit"><strong>45.928.148</strong></td>
+            <td class="num debit"><strong>1.334.450.310</strong></td>
+            <td class="num kredit"><strong>1.334.450.310</strong></td>
+          </tr>
+          <tr><td colspan="8" style="text-align:center;padding:10px;background:var(--green-light);color:var(--green);font-weight:700;font-size:0.83rem;">CEK BALANCE (Debit - Kredit = 0) &nbsp;✓ BALANCE</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- LABA RUGI -->
+<div id="lr" class="section">
+  <div class="section-header">
+    <h2>Laporan Laba Rugi</h2>
+    <p>ABS Corp · 1 Januari 2024 – 31 Januari 2024</p>
+  </div>
+  <div class="two-col">
+    <div class="card">
+      <table class="lk-table">
+        <tr><td colspan="2" class="section-head">Pendapatan</td></tr>
+        <tr><td class="indent1">Penjualan</td><td class="num">175.585.586</td></tr>
+        <tr><td class="indent1">Retur Penjualan</td><td class="num neg">(1.351.351)</td></tr>
+        <tr><td class="indent1">Potongan Penjualan</td><td class="num neg">(349.550)</td></tr>
+        <tr class="subtotal"><td class="indent1"><strong>Total Pendapatan</strong></td><td class="num"><strong>173.884.685</strong></td></tr>
+        <tr><td colspan="2" class="section-head">Harga Pokok Penjualan</td></tr>
+        <tr><td class="indent1">Harga Pokok Penjualan</td><td class="num">47.934.500</td></tr>
+        <tr class="subtotal"><td class="indent1"><strong>Total HPP</strong></td><td class="num"><strong>47.934.500</strong></td></tr>
+        <tr class="subtotal" style="background:var(--teal-light);"><td><strong>LABA KOTOR</strong></td><td class="num" style="color:var(--teal);"><strong>125.950.185</strong></td></tr>
+        <tr><td colspan="2" class="section-head">Beban Operasional</td></tr>
+        <tr><td class="indent1">Beban Gaji</td><td class="num">16.500.000</td></tr>
+        <tr><td class="indent1">Beban Sewa</td><td class="num">2.500.000</td></tr>
+        <tr><td class="indent1">Beban Listrik &amp; Air</td><td class="num">1.500.000</td></tr>
+        <tr><td class="indent1">Beban Perlengkapan</td><td class="num">1.500.000</td></tr>
+        <tr><td class="indent1">Beban Penyusutan Peralatan</td><td class="num">312.500</td></tr>
+        <tr><td class="indent1">Beban Penyusutan Kendaraan</td><td class="num">5.958.333</td></tr>
+        <tr><td class="indent1">Beban Adm. Bank</td><td class="num">30.000</td></tr>
+        <tr><td class="indent1">Beban Iklan</td><td class="num">2.000.000</td></tr>
+        <tr><td class="indent1">Biaya Perjalanan Dinas</td><td class="num">6.000.000</td></tr>
+        <tr><td class="indent1">Beban Lain-lain</td><td class="num">2.000.000</td></tr>
+        <tr class="subtotal"><td class="indent1"><strong>Total Beban Operasional</strong></td><td class="num"><strong>38.300.833</strong></td></tr>
+        <tr class="laba"><td><strong>LABA BERSIH</strong></td><td class="num"><strong>Rp 87.649.352</strong></td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>Breakdown Beban Operasional</div>
+      <div class="chart-wrap">
+        <canvas id="chartBeban"></canvas>
+      </div>
+      <div style="margin-top:1rem;">
+        <div style="font-size:0.78rem;color:var(--muted);margin-bottom:8px;">Ringkasan</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <div style="background:var(--gray-light);border-radius:8px;padding:10px;">
+            <div style="font-size:0.75rem;color:var(--muted);">GPM</div>
+            <div style="font-size:1.1rem;font-weight:700;color:var(--teal);">72,4%</div>
+          </div>
+          <div style="background:var(--gray-light);border-radius:8px;padding:10px;">
+            <div style="font-size:0.75rem;color:var(--muted);">NPM</div>
+            <div style="font-size:1.1rem;font-weight:700;color:var(--green);">50,4%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NERACA -->
+<div id="neraca" class="section">
+  <div class="section-header">
+    <h2>Laporan Neraca (Balance Sheet)</h2>
+    <p>ABS Corp · 31 Januari 2024</p>
+  </div>
+  <div class="card">
+    <div class="neraca-grid">
+      <div class="neraca-side">
+        <h4>ASET</h4>
+        <table class="lk-table">
+          <tr><td colspan="2" class="section-head">Aset Lancar</td></tr>
+          <tr><td class="indent1">Kas</td><td class="num">36.540.000</td></tr>
+          <tr><td class="indent1">Bank BCA</td><td class="num">537.332.000</td></tr>
+          <tr><td class="indent1">Piutang Dagang</td><td class="num">84.000.000</td></tr>
+          <tr><td class="indent1">Persediaan</td><td class="num">103.642.076</td></tr>
+          <tr><td class="indent1">Perlengkapan</td><td class="num">1.500.000</td></tr>
+          <tr><td class="indent1">Biaya Dibayar Dimuka</td><td class="num">27.500.000</td></tr>
+          <tr class="subtotal"><td><strong>Total Aset Lancar</strong></td><td class="num"><strong>790.514.076</strong></td></tr>
+          <tr><td colspan="2" class="section-head">Aset Tetap</td></tr>
+          <tr><td class="indent1">Peralatan</td><td class="num">15.000.000</td></tr>
+          <tr><td class="indent1">Akum. Penyusutan</td><td class="num neg">(312.500)</td></tr>
+          <tr><td class="indent1">Kendaraan</td><td class="num">436.000.000</td></tr>
+          <tr><td class="indent1">Akum. Penyusutan</td><td class="num neg">(5.958.333)</td></tr>
+          <tr class="subtotal"><td><strong>Total Aset Tetap</strong></td><td class="num"><strong>444.729.167</strong></td></tr>
+          <tr class="total"><td><strong>TOTAL ASET</strong></td><td class="num"><strong>1.235.243.243</strong></td></tr>
+        </table>
+      </div>
+      <div class="neraca-side">
+        <h4>LIABILITAS &amp; MODAL</h4>
+        <table class="lk-table">
+          <tr><td colspan="2" class="section-head">Liabilitas Jangka Pendek</td></tr>
+          <tr><td class="indent1">Utang Dagang</td><td class="num">100.000.000</td></tr>
+          <tr><td class="indent1">Utang Gaji</td><td class="num">16.425.000</td></tr>
+          <tr><td class="indent1">Utang Pajak</td><td class="num">5.568.891</td></tr>
+          <tr><td class="indent1">Pendapatan Diterima Dimuka</td><td class="num">10.000.000</td></tr>
+          <tr class="subtotal"><td><strong>Total Liab. Jangka Pendek</strong></td><td class="num"><strong>131.993.891</strong></td></tr>
+          <tr><td colspan="2" class="section-head">Liabilitas Jangka Panjang</td></tr>
+          <tr><td class="indent1">Utang Bank</td><td class="num">370.600.000</td></tr>
+          <tr class="subtotal"><td><strong>Total Liabilitas</strong></td><td class="num"><strong>502.593.891</strong></td></tr>
+          <tr><td colspan="2" class="section-head">Modal</td></tr>
+          <tr><td class="indent1">Modal Pemilik</td><td class="num">650.000.000</td></tr>
+          <tr><td class="indent1">Prive</td><td class="num neg">(5.000.000)</td></tr>
+          <tr><td class="indent1">Laba Ditahan</td><td class="num">87.649.352</td></tr>
+          <tr class="subtotal"><td><strong>Total Modal</strong></td><td class="num"><strong>732.649.352</strong></td></tr>
+          <tr class="total"><td><strong>TOTAL LIAB. &amp; MODAL</strong></td><td class="num"><strong>1.235.243.243</strong></td></tr>
+          <tr><td colspan="2" style="text-align:center;padding:10px;background:var(--green-light);color:var(--green);font-weight:700;border-radius:6px;font-size:0.85rem;">✓ BALANCE</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ARUS KAS -->
+<div id="ak" class="section">
+  <div class="section-header">
+    <h2>Laporan Arus Kas</h2>
+    <p>ABS Corp · Januari 2024 · Metode Tidak Langsung</p>
+  </div>
+  <div class="two-col">
+    <div class="card">
+      <table class="lk-table">
+        <tr><td colspan="2" class="section-head">I. Aktivitas Operasi</td></tr>
+        <tr><td class="indent1">Laba Bersih</td><td class="num">87.649.352</td></tr>
+        <tr><td class="indent1">+ Penyusutan Peralatan</td><td class="num">312.500</td></tr>
+        <tr><td class="indent1">+ Penyusutan Kendaraan</td><td class="num">5.958.333</td></tr>
+        <tr><td class="indent1">+ Kenaikan Utang Dagang</td><td class="num">100.000.000</td></tr>
+        <tr><td class="indent1">+ Kenaikan Utang Gaji</td><td class="num">16.425.000</td></tr>
+        <tr><td class="indent1">+ Kenaikan Utang Pajak</td><td class="num">5.568.891</td></tr>
+        <tr><td class="indent1">+ Pendapatan Diterima Dimuka</td><td class="num">10.000.000</td></tr>
+        <tr><td class="indent1">- Kenaikan Piutang Dagang</td><td class="num neg">(84.000.000)</td></tr>
+        <tr><td class="indent1">- Kenaikan Persediaan</td><td class="num neg">(103.642.076)</td></tr>
+        <tr><td class="indent1">- Kenaikan Perlengkapan</td><td class="num neg">(1.500.000)</td></tr>
+        <tr><td class="indent1">- Kenaikan Biaya Dibayar Dimuka</td><td class="num neg">(27.500.000)</td></tr>
+        <tr class="subtotal"><td><strong>Total Aktivitas Operasi</strong></td><td class="num"><strong>9.272.000</strong></td></tr>
+        <tr><td colspan="2" class="section-head">II. Aktivitas Investasi</td></tr>
+        <tr><td class="indent1">- Pembelian Peralatan</td><td class="num neg">(15.000.000)</td></tr>
+        <tr><td class="indent1">- Pembelian Kendaraan</td><td class="num neg">(436.000.000)</td></tr>
+        <tr class="subtotal"><td><strong>Total Aktivitas Investasi</strong></td><td class="num neg"><strong>(451.000.000)</strong></td></tr>
+        <tr><td colspan="2" class="section-head">III. Aktivitas Pendanaan</td></tr>
+        <tr><td class="indent1">+ Modal Awal</td><td class="num">650.000.000</td></tr>
+        <tr><td class="indent1">+ Utang Bank</td><td class="num">370.600.000</td></tr>
+        <tr><td class="indent1">- Prive Pemilik</td><td class="num neg">(5.000.000)</td></tr>
+        <tr class="subtotal"><td><strong>Total Aktivitas Pendanaan</strong></td><td class="num"><strong>1.015.600.000</strong></td></tr>
+        <tr class="laba"><td><strong>KENAIKAN KAS BERSIH</strong></td><td class="num"><strong>573.872.000</strong></td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>Komposisi Arus Kas</div>
+      <div class="chart-wrap">
+        <canvas id="chartAK"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PERUBAHAN MODAL -->
+<div id="modal" class="section">
+  <div class="section-header">
+    <h2>Laporan Perubahan Modal</h2>
+    <p>ABS Corp · Januari 2024</p>
+  </div>
+  <div class="card" style="max-width:480px;">
+    <table class="lk-table">
+      <tr><td colspan="2" class="section-head">Perubahan Modal</td></tr>
+      <tr><td>Modal Pemilik (Awal)</td><td class="num">650.000.000</td></tr>
+      <tr><td class="indent1">Dikurangi: Prive Pemilik</td><td class="num neg">(5.000.000)</td></tr>
+      <tr><td class="indent1">Ditambah: Laba Bersih</td><td class="num">87.649.352</td></tr>
+      <tr class="laba"><td><strong>Modal Akhir (31 Jan 2024)</strong></td><td class="num"><strong>Rp 732.649.352</strong></td></tr>
+    </table>
+  </div>
+</div>
+
+
+<!-- JURNAL PENUTUP -->
+<div id="jp" class="section">
+  <div class="section-header">
+    <h2>Jurnal Penutup (Closing Entries)</h2>
+    <p>ABS Corp · 31 Januari 2024 · Menutup semua akun nominal</p>
+  </div>
+
+  <div class="metrics" style="grid-template-columns:repeat(auto-fit,minmax(160px,1fr));margin-bottom:1.5rem;">
+    <div class="metric blue"><div class="label">Menutup Pendapatan</div><div class="value" style="font-size:1.1rem;">Rp 175,6 Jt</div></div>
+    <div class="metric teal"><div class="label">Menutup HPP</div><div class="value" style="font-size:1.1rem;">Rp 47,9 Jt</div></div>
+    <div class="metric amber"><div class="label">Menutup Beban</div><div class="value" style="font-size:1.1rem;">Rp 38,3 Jt</div></div>
+    <div class="metric green"><div class="label">Laba Dipindahkan</div><div class="value" style="font-size:1.1rem;">Rp 87,6 Jt</div></div>
+  </div>
+
+  <div class="card">
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Tanggal</th>
+            <th>Kode</th>
+            <th>Nama Akun</th>
+            <th>Keterangan</th>
+            <th class="num">Debit (Rp)</th>
+            <th class="num">Kredit (Rp)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>31/01/2024</td><td><span class="code">4100</span></td><td>Penjualan</td><td>Menutup akun pendapatan</td><td class="num debit">175.585.586</td><td class="num">—</td></tr>
+          <tr><td></td><td><span class="code">4110</span></td><td>Retur Penjualan</td><td>Menutup akun pendapatan</td><td class="num">—</td><td class="num kredit">1.351.351</td></tr>
+          <tr><td></td><td><span class="code">4120</span></td><td>Potongan Penjualan</td><td>Menutup akun pendapatan</td><td class="num">—</td><td class="num kredit">349.550</td></tr>
+          <tr><td></td><td><span class="code">4200</span></td><td>Pendapatan Lain-lain</td><td>Menutup akun pendapatan</td><td class="num">—</td><td class="num">—</td></tr>
+          <tr><td></td><td><span class="code">7000</span></td><td>Ikhtisar Laba Rugi</td><td>Menutup akun pendapatan</td><td class="num">—</td><td class="num kredit">173.884.685</td></tr>
+          <tr><td>31/01/2024</td><td><span class="code">7000</span></td><td>Ikhtisar Laba Rugi</td><td>Menutup akun HPP</td><td class="num debit">47.934.500</td><td class="num">—</td></tr>
+          <tr><td></td><td><span class="code">5100</span></td><td>Pembelian</td><td>Menutup akun HPP</td><td class="num">—</td><td class="num">—</td></tr>
+          <tr><td></td><td><span class="code">5110</span></td><td>Harga Pokok Penjualan</td><td>Menutup akun HPP</td><td class="num">—</td><td class="num kredit">47.934.500</td></tr>
+          <tr><td></td><td><span class="code">5120</span></td><td>Retur Pembelian</td><td>Menutup akun HPP</td><td class="num">—</td><td class="num">—</td></tr>
+          <tr><td></td><td><span class="code">5130</span></td><td>Potongan Pembelian</td><td>Menutup akun HPP</td><td class="num">—</td><td class="num">—</td></tr>
+          <tr><td></td><td><span class="code">5140</span></td><td>Ongkos Angkut Masuk</td><td>Menutup akun HPP</td><td class="num">—</td><td class="num">—</td></tr>
+          <tr><td>31/01/2024</td><td><span class="code">7000</span></td><td>Ikhtisar Laba Rugi</td><td>Menutup akun beban</td><td class="num debit">38.300.833</td><td class="num">—</td></tr>
+          <tr><td></td><td><span class="code">6100</span></td><td>Beban Gaji</td><td>Menutup akun beban</td><td class="num">—</td><td class="num kredit">16.500.000</td></tr>
+          <tr><td></td><td><span class="code">6110</span></td><td>Beban Sewa</td><td>Menutup akun beban</td><td class="num">—</td><td class="num kredit">2.500.000</td></tr>
+          <tr><td></td><td><span class="code">6120</span></td><td>Beban Listrik &amp; Air</td><td>Menutup akun beban</td><td class="num">—</td><td class="num kredit">1.500.000</td></tr>
+          <tr><td></td><td><span class="code">6130</span></td><td>Beban Perlengkapan</td><td>Menutup akun beban</td><td class="num">—</td><td class="num kredit">1.500.000</td></tr>
+          <tr><td></td><td><span class="code">6140</span></td><td>Beban Penyusutan Peralatan</td><td>Menutup akun beban</td><td class="num">—</td><td class="num kredit">312.500</td></tr>
+          <tr><td></td><td><span class="code">6150</span></td><td>Beban Penyusutan Kendaraan</td><td>Menutup akun beban</td><td class="num">—</td><td class="num kredit">5.958.333</td></tr>
+          <tr><td></td><td><span class="code">6160</span></td><td>Beban Asuransi</td><td>Menutup akun beban</td><td class="num">—</td><td class="num">—</td></tr>
+          <tr><td></td><td><span class="code">6170</span></td><td>Beban Iklan</td><td>Menutup akun beban</td><td class="num">—</td><td class="num kredit">2.000.000</td></tr>
+          <tr><td></td><td><span class="code">6180</span></td><td>Beban Bunga</td><td>Menutup akun beban</td><td class="num">—</td><td class="num">—</td></tr>
+          <tr><td></td><td><span class="code">6190</span></td><td>Biaya Admin</td><td>Menutup akun beban</td><td class="num">—</td><td class="num kredit">30.000</td></tr>
+          <tr><td></td><td><span class="code">6200</span></td><td>Biaya Perjalanan Dinas</td><td>Menutup akun beban</td><td class="num">—</td><td class="num kredit">6.000.000</td></tr>
+          <tr><td></td><td><span class="code">6300</span></td><td>Beban Lain-lain</td><td>Menutup akun beban</td><td class="num">—</td><td class="num kredit">2.000.000</td></tr>
+          <tr><td></td><td><span class="code">6400</span></td><td>Beban Pajak Penghasilan</td><td>Menutup akun beban</td><td class="num">—</td><td class="num">—</td></tr>
+          <tr><td>31/01/2024</td><td><span class="code">3100</span></td><td>Modal Pemilik</td><td>Menutup akun prive</td><td class="num debit">5.000.000</td><td class="num">—</td></tr>
+          <tr><td></td><td><span class="code">3110</span></td><td>Prive Pemilik</td><td>Menutup akun prive</td><td class="num">—</td><td class="num kredit">5.000.000</td></tr>
+          <tr><td>31/01/2024</td><td><span class="code">7000</span></td><td>Ikhtisar Laba Rugi</td><td>Memindahkan laba/rugi ke modal</td><td class="num debit">87.649.352</td><td class="num">—</td></tr>
+          <tr><td></td><td><span class="code">3120</span></td><td>Laba Ditahan</td><td>Memindahkan laba/rugi ke modal</td><td class="num">—</td><td class="num kredit">87.649.352</td></tr>
+          <tr style="font-weight:700;background:var(--blue-light);">
+            <td colspan="4"><strong>Total Jurnal Penutup</strong></td>
+            <td class="num debit"><strong>354.470.271</strong></td>
+            <td class="num kredit"><strong>354.470.271</strong></td>
+          </tr>
+          <tr><td colspan="6" style="text-align:center;padding:10px;background:var(--green-light);color:var(--green);font-weight:700;font-size:0.83rem;">CEK BALANCE (Debit - Kredit = 0) &nbsp;✓ BALANCE</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- LAPORAN PAJAK -->
+<div id="pajak" class="section">
+  <div class="section-header">
+    <h2>Laporan Pajak</h2>
+    <p>ABS Corp · Januari 2024 · PPN, PPh 4(2), PPh 21</p>
+  </div>
+  <div class="pajak-grid">
+    <div class="pajak-card">
+      <div class="p-label">PPN Keluaran</div>
+      <div class="p-val" style="color:var(--blue);">Rp 19.127.315</div>
+      <div class="p-sub">5 faktur pajak keluaran</div>
+    </div>
+    <div class="pajak-card">
+      <div class="p-label">PPN Masukan</div>
+      <div class="p-val" style="color:var(--teal);">Rp 16.673.424</div>
+      <div class="p-sub">3 faktur pajak masukan</div>
+    </div>
+    <div class="pajak-card">
+      <div class="p-label">PPN Kurang Bayar</div>
+      <div class="p-val" style="color:var(--red);">Rp 2.453.891</div>
+      <div class="p-sub">Disetor ke kas negara</div>
+    </div>
+    <div class="pajak-card">
+      <div class="p-label">PPh 4(2) Sewa</div>
+      <div class="p-val" style="color:var(--amber);">Rp 3.000.000</div>
+      <div class="p-sub">10% × Rp 30.000.000</div>
+    </div>
+    <div class="pajak-card">
+      <div class="p-label">PPh 21 Gaji</div>
+      <div class="p-val" style="color:var(--green);">Rp 75.000</div>
+      <div class="p-sub">Terutang atas gaji karyawan</div>
+    </div>
+    <div class="pajak-card">
+      <div class="p-label">PPh 23 Jasa Service Komputer</div>
+      <div class="p-val" style="color:var(--teal);">Rp 40.000</div>
+      <div class="p-sub">2% x Rp 2.000.000</div>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title"><span class="dot" style="background:var(--blue)"></span>PPN Keluaran (Output Tax)</div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>No. Faktur</th><th class="num">DPP (Rp)</th><th class="num">PPN (Rp)</th><th>Ket.</th></tr></thead>
+          <tbody>
+            <tr><td><span class="code">FJ-2024-01-001</span></td><td class="num">58.558.559</td><td class="num debit">6.441.441</td><td>Keluaran</td></tr>
+            <tr><td><span class="code">FJ-2024-01-002</span></td><td class="num">40.000.000</td><td class="num debit">4.400.000</td><td>Keluaran</td></tr>
+            <tr><td><span class="code">FJ-2024-01-003</span></td><td class="num">77.027.027</td><td class="num debit">8.472.973</td><td>Keluaran</td></tr>
+            <tr><td><span class="code">FJ-2024-01-004</span></td><td class="num neg">(1.351.351)</td><td class="num neg">(148.649)</td><td>Retur</td></tr>
+            <tr><td><span class="code">FJ-2024-01-005</span></td><td class="num neg">(349.550)</td><td class="num neg">(38.450)</td><td>Diskon</td></tr>
+            <tr style="font-weight:700;background:var(--blue-light)"><td>TOTAL</td><td class="num">175.585.586</td><td class="num debit">19.127.315</td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="dot" style="background:var(--teal)"></span>PPN Masukan (Input Tax)</div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>No. Faktur</th><th class="num">DPP (Rp)</th><th class="num">PPN (Rp)</th><th>Ket.</th></tr></thead>
+          <tbody>
+            <tr><td><span class="code">FP-2024-01-001</span></td><td class="num">75.000.000</td><td class="num kredit">8.250.000</td><td>Masukan</td></tr>
+            <tr><td><span class="code">FP-2024-01-002</span></td><td class="num">90.090.090</td><td class="num kredit">9.909.910</td><td>Masukan</td></tr>
+            <tr><td><span class="code">FP-2024-01-003</span></td><td class="num neg">(13.513.514)</td><td class="num neg">(1.486.486)</td><td>Retur</td></tr>
+            <tr style="font-weight:700;background:var(--teal-light)"><td>TOTAL</td><td class="num">151.576.576</td><td class="num kredit">16.673.424</td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="margin-top:1rem;background:var(--red-light);border-radius:8px;padding:1rem;">
+        <div style="font-size:0.78rem;color:var(--muted);margin-bottom:4px;">Rekap PPN</div>
+        <div style="display:flex;justify-content:space-between;font-size:0.85rem;margin-bottom:4px;"><span>PPN Keluaran</span><span>19.127.315</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:0.85rem;margin-bottom:8px;"><span>PPN Masukan</span><span>(16.673.424)</span></div>
+        <div style="display:flex;justify-content:space-between;font-weight:700;color:var(--red);"><span>PPN Kurang Bayar</span><span>Rp 2.453.891</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- end main -->
+
+<div class="footer">
+  Portfolio ini dibuat menggunakan data full-cycle accounting otomatis dari Microsoft Excel · Diah Ayu Wulandari · 2024
+</div>
+
+<script>
+function show(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+const fmtRp = v => 'Rp ' + v.toLocaleString('id-ID');
+
+// Chart PnL
+new Chart(document.getElementById('chartPnL'), {
+  type: 'bar',
+  data: {
+    labels: ['Penjualan Bersih', 'HPP', 'Laba Kotor', 'Beban Ops', 'Laba Bersih'],
+    datasets: [{
+      data: [173884685, 47934500, 125950185, 38300833, 87649352],
+      backgroundColor: ['#1B5EA6','#E5E7EB','#0F766E','#F59E0B','#166534'],
+      borderRadius: 6
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => fmtRp(ctx.raw) } } },
+    scales: { y: { ticks: { callback: v => 'Rp '+Math.round(v/1e6)+'Jt', font:{size:10} }, grid:{color:'#F3F4F6'} }, x: { ticks:{font:{size:10}} } }
+  }
+});
+
+// Chart Aset
+new Chart(document.getElementById('chartAset'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Kas','Bank BCA','Piutang Dagang','Persediaan','Aset Tetap Neto','Lainnya'],
+    datasets: [{ data: [36540000,537332000,84000000,103642076,444729167,29000000],
+      backgroundColor:['#6B7280','#1B5EA6','#0F766E','#92400E','#166534','#9CA3AF'], borderWidth:0 }]
+  },
+  options: { responsive:true, maintainAspectRatio:false,
+    plugins:{ legend:{ position:'bottom', labels:{font:{size:10},boxWidth:12} }, tooltip:{ callbacks:{ label: ctx => ctx.label+': '+fmtRp(ctx.raw) } } }
+  }
+});
+
+// Chart Liab Modal
+new Chart(document.getElementById('chartLiabModal'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Liab. Jangka Pendek','Liab. Jangka Panjang','Modal'],
+    datasets: [{ data:[131993891,370600000,732649352], backgroundColor:['#EF4444','#F59E0B','#166534'], borderWidth:0 }]
+  },
+  options: { responsive:true, maintainAspectRatio:false,
+    plugins:{ legend:{ position:'bottom', labels:{font:{size:10},boxWidth:12} }, tooltip:{ callbacks:{ label: ctx => ctx.label+': '+fmtRp(ctx.raw) } } }
+  }
+});
+
+// Chart Beban
+new Chart(document.getElementById('chartBeban'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Beban Gaji','Beban Peny. Kendaraan','Beban Sewa','Beban Iklan','Beban Listrik','Beban Perlengkapan','Beban Peny. Peralatan','Adm. Bank'],
+    datasets: [{ data:[16500000,5958333,2500000,1500000,1500000,312500,30000],
+      backgroundColor:['#1B5EA6','#0F766E','#92400E','#166534','#7C3AED','#DB2777','#6B7280','#0891B2','#D97706','#6B7280'], borderWidth:0 }]
+  },
+  options: { responsive:true, maintainAspectRatio:false,
+    plugins:{ legend:{ position:'bottom', labels:{font:{size:9},boxWidth:10} }, tooltip:{ callbacks:{ label: ctx => ctx.label+': '+fmtRp(ctx.raw) } } }
+  }
+});
+
+// Chart Arus Kas
+new Chart(document.getElementById('chartAK'), {
+  type: 'bar',
+  data: {
+    labels: ['Aktivitas Operasi','Aktivitas Investasi','Aktivitas Pendanaan'],
+    datasets: [{ data:[9272000,-451000000,1015600000],
+      backgroundColor: ctx => ctx.raw < 0 ? '#EF4444' : '#1B5EA6', borderRadius:6 }]
+  },
+  options: { responsive:true, maintainAspectRatio:false, indexAxis:'y',
+    plugins:{ legend:{display:false}, tooltip:{ callbacks:{ label: ctx => fmtRp(ctx.raw) } } },
+    scales:{ x:{ ticks:{ callback: v => Math.round(v/1e6)+'Jt', font:{size:10} }, grid:{color:'#F3F4F6'} }, y:{ticks:{font:{size:10}}} }
+  }
+});
+</script>
+</body>
+</html>
