@@ -1195,7 +1195,7 @@ setTimeout(renderBB, 100);
             <tr><td><span class="code">FJ-2024-01-003</span></td><td class="num">77.027.027</td><td class="num debit">8.472.973</td><td>Keluaran</td></tr>
             <tr><td><span class="code">FJ-2024-01-004</span></td><td class="num neg">(1.351.351)</td><td class="num neg">(148.649)</td><td>Retur</td></tr>
             <tr><td><span class="code">FJ-2024-01-005</span></td><td class="num neg">(349.550)</td><td class="num neg">(38.450)</td><td>Diskon</td></tr>
-            <tr style="font-weight:700;background:var(--blue-light)"><td>TOTAL</td><td class="num">175.585.586</td><td class="num debit">19.127.315</td><td></td></tr>
+            <tr style="font-weight:700;background:var(--blue-light)"><td>TOTAL</td><td class="num">173.884.685</td><td class="num debit">19.127.315</td><td></td></tr>
           </tbody>
         </table>
       </div>
@@ -1286,9 +1286,9 @@ new Chart(document.getElementById('chartLiabModal'), {
 new Chart(document.getElementById('chartBeban'), {
   type: 'doughnut',
   data: {
-    labels: ['Beban Gaji','Beban Peny. Kendaraan','Beban Sewa','Beban Iklan','Beban Listrik','Beban Perlengkapan','Beban Peny. Peralatan','Adm. Bank'],
-    datasets: [{ data:[16500000,5958333,2500000,1500000,1500000,312500,30000],
-      backgroundColor:['#1B5EA6','#0F766E','#92400E','#166534','#7C3AED','#DB2777','#6B7280','#0891B2','#D97706','#6B7280'], borderWidth:0 }]
+    labels: ['Beban Gaji','Beban Peny. Kendaraan','Beban Sewa','Beban Listrik','Beban Perlengkapan','Beban Peny. Peralatan','Beban Iklan','Perjalanan Dinas','Beban Lain-lain','Adm. Bank'],
+    datasets: [{ data:[16500000,5958333,2500000,1500000,1500000,312500,2000000,6000000,2000000,30000],
+      backgroundColor:['#1B5EA6','#0F766E','#92400E','#166534','#7C3AED','#DB2777','#0891B2','#D97706','#6B7280','#DB2777'], borderWidth:0 }]
   },
   options: { responsive:true, maintainAspectRatio:false,
     plugins:{ legend:{ position:'bottom', labels:{font:{size:9},boxWidth:10} }, tooltip:{ callbacks:{ label: ctx => ctx.label+': '+fmtRp(ctx.raw) } } }
